@@ -1,0 +1,66 @@
+name: comon_logger
+repository: https://github.com/serezhia/comon_logger
+
+packages:
+  - comon_logger
+  - comon_logger_flutter
+  - comon_logger_dio
+  - comon_logger_dio_flutter
+  - comon_logger_file
+  - comon_logger_share_flutter
+  - comon_logger_navigation_flutter
+  - comon_logger_devtools_extension
+  - examples/**
+
+command:
+  bootstrap:
+    usePubspecOverrides: true
+
+  version:
+    linkToCommits: true
+    workspaceChangelog: true
+
+scripts:
+  analyze:
+    description: Run dart analyze in all packages.
+    run: dart analyze --fatal-infos
+    exec:
+      concurrency: 5
+
+  test:dart:
+    description: Run tests in pure Dart packages.
+    run: dart test
+    exec:
+      concurrency: 1
+    packageFilters:
+      dirExists: test
+      flutter: false
+
+  test:flutter:
+    description: Run tests in Flutter packages.
+    run: flutter test
+    exec:
+      concurrency: 1
+    packageFilters:
+      dirExists: test
+      flutter: true
+
+  test:
+    description: Run all tests.
+    steps:
+      - test:dart
+      - test:flutter
+
+  format:
+    description: Format all packages.
+    run: dart format .
+    exec:
+      concurrency: 5
+
+  publish:dry:
+    description: Dry-run publish for all publishable packages.
+    run: dart pub publish --dry-run
+    exec:
+      concurrency: 1
+    packageFilters:
+      noPrivate: true

@@ -1,0 +1,29 @@
+name: flutter_app_example
+description: Flutter example app demonstrating comon_logger packages.
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.10.8
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+  dio: ^5.0.0
+  comon_logger: 0.1.0
+  comon_logger_flutter: 0.1.0
+  comon_logger_dio: 0.1.0
+  comon_logger_dio_flutter: 0.1.0
+  comon_logger_share_flutter: 0.1.0
+  comon_logger_navigation_flutter: 0.1.0
+  comon_logger_file: 0.1.0
+  comon_logger_devtools_extension: 0.1.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true

@@ -1,0 +1,24 @@
+name: comon_logger_devtools_extension
+description: DevTools extension for comon_logger — live log viewer with filters.
+version: 0.1.0
+publish_to: "none"
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+  flutter: ">=3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  comon_logger: 0.1.0
+  devtools_app_shared: ^0.3.0
+  devtools_extensions: ^0.3.0
+  vm_service: ^14.0.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true

@@ -1,0 +1,5 @@
+name: comon_logger
+issueTracker: https://github.com/smmarty/bristol_mobile/issues
+version: 0.1.0
+materialIconCodePoint: "0xe0b0"
+requiresConnection: false
