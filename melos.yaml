@@ -58,9 +58,10 @@ scripts:
       concurrency: 5
 
   publish:dry:
-    description: Dry-run publish for all publishable packages.
+    description: Dry-run publish for all publishable packages. Run from a clean git state.
     run: dart pub publish --dry-run
     exec:
       concurrency: 1
+      failFast: false
     packageFilters:
       noPrivate: true

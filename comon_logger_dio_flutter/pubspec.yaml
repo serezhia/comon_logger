@@ -17,9 +17,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  comon_logger: 0.1.0
-  comon_logger_dio: 0.1.0
-  comon_logger_flutter: 0.1.0
+  comon_logger: ^0.1.0
+  comon_logger_dio: ^0.1.0
+  comon_logger_flutter: ^0.1.0
 
 dev_dependencies:
   flutter_test:
