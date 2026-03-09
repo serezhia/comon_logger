@@ -24,11 +24,11 @@ class OtlpLogHandler extends LogHandler {
     bool insecure = true,
     super.filter = const AllPassLogFilter(),
   }) : _exporter = LogExporter(
-          endpoint: endpoint,
-          serviceName: serviceName,
-          serviceVersion: serviceVersion,
-          insecure: insecure,
-        );
+         endpoint: endpoint,
+         serviceName: serviceName,
+         serviceVersion: serviceVersion,
+         insecure: insecure,
+       );
 
   final LogExporter _exporter;
 
@@ -41,47 +41,57 @@ class OtlpLogHandler extends LogHandler {
     final attributes = <otel_common.KeyValue>[];
 
     if (record.feature != null) {
-      attributes.add(otel_common.KeyValue(
-        key: 'LOG_FEATURE',
-        value: otel_common.AnyValue(stringValue: record.feature),
-      ));
+      attributes.add(
+        otel_common.KeyValue(
+          key: 'LOG_FEATURE',
+          value: otel_common.AnyValue(stringValue: record.feature),
+        ),
+      );
     }
 
     if (record.error != null) {
-      attributes.add(otel_common.KeyValue(
-        key: 'LOG_ERROR',
-        value: otel_common.AnyValue(stringValue: record.error.toString()),
-      ));
+      attributes.add(
+        otel_common.KeyValue(
+          key: 'LOG_ERROR',
+          value: otel_common.AnyValue(stringValue: record.error.toString()),
+        ),
+      );
     }
 
     if (record.stackTrace != null) {
-      attributes.add(otel_common.KeyValue(
-        key: 'LOG_STACK_TRACE',
-        value:
-            otel_common.AnyValue(stringValue: record.stackTrace.toString()),
-      ));
+      attributes.add(
+        otel_common.KeyValue(
+          key: 'LOG_STACK_TRACE',
+          value: otel_common.AnyValue(
+            stringValue: record.stackTrace.toString(),
+          ),
+        ),
+      );
     }
 
     if (record.layer != null) {
-      attributes.add(otel_common.KeyValue(
-        key: 'LOG_LAYER',
-        value: otel_common.AnyValue(stringValue: record.layer.toString()),
-      ));
+      attributes.add(
+        otel_common.KeyValue(
+          key: 'LOG_LAYER',
+          value: otel_common.AnyValue(stringValue: record.layer.toString()),
+        ),
+      );
     }
 
     if (record.type != null) {
-      attributes.add(otel_common.KeyValue(
-        key: 'LOG_TYPE',
-        value: otel_common.AnyValue(stringValue: record.type.toString()),
-      ));
+      attributes.add(
+        otel_common.KeyValue(
+          key: 'LOG_TYPE',
+          value: otel_common.AnyValue(stringValue: record.type.toString()),
+        ),
+      );
     }
 
     if (record.extra != null) {
       for (final entry in record.extra!.entries) {
-        attributes.add(otel_common.KeyValue(
-          key: entry.key,
-          value: _toAnyValue(entry.value),
-        ));
+        attributes.add(
+          otel_common.KeyValue(key: entry.key, value: _toAnyValue(entry.value)),
+        );
       }
     }
 

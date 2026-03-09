@@ -72,14 +72,16 @@ class LogExporter {
   }) {
     if (_shuttingDown) return;
 
-    _buffer.add(_BufferedRecord(
-      timeUnixNano: timeUnixNano,
-      severityNumber: severityNumber,
-      severityText: severityText,
-      body: body,
-      scopeName: scopeName,
-      attributes: attributes,
-    ));
+    _buffer.add(
+      _BufferedRecord(
+        timeUnixNano: timeUnixNano,
+        severityNumber: severityNumber,
+        severityText: severityText,
+        body: body,
+        scopeName: scopeName,
+        attributes: attributes,
+      ),
+    );
 
     if (_buffer.length >= _maxBufferSize) {
       _flush();
@@ -127,10 +129,7 @@ class LogExporter {
 
     final request = otel_service.ExportLogsServiceRequest(
       resourceLogs: [
-        otel_logs.ResourceLogs(
-          resource: _resource,
-          scopeLogs: scopeLogs,
-        ),
+        otel_logs.ResourceLogs(resource: _resource, scopeLogs: scopeLogs),
       ],
     );
 
