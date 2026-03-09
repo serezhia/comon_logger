@@ -1,0 +1,16 @@
+name: comon_logger_opentelemetry
+description: OTLP gRPC log handler for comon_logger
+version: 0.1.0
+publish_to: none
+
+environment:
+  sdk: ">=3.9.0 <4.0.0"
+
+dependencies:
+  comon_logger: ^0.1.0
+  grpc: ^5.0.0
+  protobuf: ^6.0.0
+  fixnum: ^1.1.0
+
+dev_dependencies:
+  lints: ^4.0.0
