@@ -9,7 +9,6 @@ A Flutter application demonstrating the full `comon_logger` ecosystem:
 - **comon_logger_navigation_flutter** — automatic route navigation logging
 - **comon_logger_file** — persistent file-based logging with rotation
 - **comon_logger_share_flutter** — share/export logs as text or JSON
-- **comon_logger_devtools_extension** — live log streaming to DevTools
 
 ## Getting Started
 

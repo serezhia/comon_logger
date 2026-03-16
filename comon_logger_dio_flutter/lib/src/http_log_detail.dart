@@ -285,17 +285,22 @@ class _JsonViewer extends StatelessWidget {
               ),
             ),
           ),
-          // JSON body
-          if (data is Map || data is List)
-            _buildJsonTree(context, data, 0)
-          else
-            SelectableText(
-              prettyText,
+          // JSON body — single SelectableText for proper text selection
+          SelectableText.rich(
+            TextSpan(
               style: const TextStyle(
                 fontSize: 11,
                 fontFamily: 'monospace',
+                height: 1.4,
               ),
+              children: [
+                if (data is Map || data is List)
+                  _buildJsonSpan(data, 0, theme)
+                else
+                  TextSpan(text: prettyText),
+              ],
             ),
+          ),
         ],
       ),
     );
@@ -310,200 +315,83 @@ class _JsonViewer extends StatelessWidget {
     }
   }
 
-  /// Recursively builds a color-highlighted JSON tree widget.
-  static Widget _buildJsonTree(BuildContext context, Object? data, int depth) {
-    final theme = Theme.of(context);
+  /// Recursively builds a color-highlighted JSON [TextSpan] tree.
+  static TextSpan _buildJsonSpan(Object? data, int depth, ThemeData theme) {
     final indent = '  ' * depth;
+    final childIndent = '  ' * (depth + 1);
+    final punctuationStyle = TextStyle(
+      color: theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.5),
+    );
 
     if (data is Map) {
       if (data.isEmpty) {
-        return Text('{}',
-            style: TextStyle(
-                fontSize: 11,
-                fontFamily: 'monospace',
-                color: theme.textTheme.bodyMedium?.color));
+        return TextSpan(
+          text: '{}',
+          style: TextStyle(color: theme.textTheme.bodyMedium?.color),
+        );
       }
 
       final entries = data.entries.toList();
-      final lines = <Widget>[];
-      lines.add(Text('$indent{',
-          style: TextStyle(
-              fontSize: 11,
-              fontFamily: 'monospace',
-              color:
-                  theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.5))));
+      final children = <InlineSpan>[
+        TextSpan(text: '{\n', style: punctuationStyle),
+      ];
 
       for (var i = 0; i < entries.length; i++) {
         final entry = entries[i];
         final comma = i < entries.length - 1 ? ',' : '';
-        final key = entry.key;
-        final value = entry.value;
 
-        if (value is Map || value is List) {
-          lines.add(Padding(
-            padding: EdgeInsets.only(left: (depth + 1) * 12.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                RichText(
-                  text: TextSpan(
-                    style: const TextStyle(
-                        fontSize: 11, fontFamily: 'monospace', height: 1.4),
-                    children: [
-                      TextSpan(
-                        text: '"$key"',
-                        style: TextStyle(color: theme.colorScheme.primary),
-                      ),
-                      TextSpan(
-                        text: ': ',
-                        style: TextStyle(
-                            color: theme.textTheme.bodyMedium?.color
-                                ?.withValues(alpha: 0.5)),
-                      ),
-                    ],
-                  ),
-                ),
-                _buildJsonTree(context, value, depth + 1),
-                if (comma.isNotEmpty)
-                  Text(comma,
-                      style: TextStyle(
-                          fontSize: 11,
-                          fontFamily: 'monospace',
-                          color: theme.textTheme.bodyMedium?.color
-                              ?.withValues(alpha: 0.5))),
-              ],
-            ),
-          ));
+        children.add(TextSpan(text: childIndent));
+        children.add(TextSpan(
+          text: '"${entry.key}"',
+          style: TextStyle(color: theme.colorScheme.primary),
+        ));
+        children.add(TextSpan(text: ': ', style: punctuationStyle));
+
+        if (entry.value is Map || entry.value is List) {
+          children.add(_buildJsonSpan(entry.value, depth + 1, theme));
         } else {
-          lines.add(Padding(
-            padding: EdgeInsets.only(left: (depth + 1) * 12.0),
-            child: RichText(
-              text: TextSpan(
-                style: const TextStyle(
-                    fontSize: 11, fontFamily: 'monospace', height: 1.4),
-                children: [
-                  TextSpan(
-                    text: '"$key"',
-                    style: TextStyle(color: theme.colorScheme.primary),
-                  ),
-                  TextSpan(
-                    text: ': ',
-                    style: TextStyle(
-                        color: theme.textTheme.bodyMedium?.color
-                            ?.withValues(alpha: 0.5)),
-                  ),
-                  _valueSpan(value, theme),
-                  TextSpan(
-                    text: comma,
-                    style: TextStyle(
-                        color: theme.textTheme.bodyMedium?.color
-                            ?.withValues(alpha: 0.5)),
-                  ),
-                ],
-              ),
-            ),
-          ));
+          children.add(_valueSpan(entry.value, theme));
         }
+
+        children.add(TextSpan(text: '$comma\n', style: punctuationStyle));
       }
 
-      lines.add(Text('$indent}',
-          style: TextStyle(
-              fontSize: 11,
-              fontFamily: 'monospace',
-              color:
-                  theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.5))));
-
-      return SelectionArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: lines,
-        ),
-      );
+      children.add(TextSpan(text: '$indent}', style: punctuationStyle));
+      return TextSpan(children: children);
     }
 
     if (data is List) {
       if (data.isEmpty) {
-        return Text('[]',
-            style: TextStyle(
-                fontSize: 11,
-                fontFamily: 'monospace',
-                color: theme.textTheme.bodyMedium?.color));
+        return TextSpan(
+          text: '[]',
+          style: TextStyle(color: theme.textTheme.bodyMedium?.color),
+        );
       }
 
-      final lines = <Widget>[];
-      lines.add(Text('$indent[',
-          style: TextStyle(
-              fontSize: 11,
-              fontFamily: 'monospace',
-              color:
-                  theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.5))));
+      final children = <InlineSpan>[
+        TextSpan(text: '[\n', style: punctuationStyle),
+      ];
 
       for (var i = 0; i < data.length; i++) {
-        final value = data[i];
         final comma = i < data.length - 1 ? ',' : '';
 
-        if (value is Map || value is List) {
-          lines.add(Padding(
-            padding: EdgeInsets.only(left: (depth + 1) * 12.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildJsonTree(context, value, depth + 1),
-                if (comma.isNotEmpty)
-                  Text(comma,
-                      style: TextStyle(
-                          fontSize: 11,
-                          fontFamily: 'monospace',
-                          color: theme.textTheme.bodyMedium?.color
-                              ?.withValues(alpha: 0.5))),
-              ],
-            ),
-          ));
+        children.add(TextSpan(text: childIndent));
+
+        if (data[i] is Map || data[i] is List) {
+          children.add(_buildJsonSpan(data[i], depth + 1, theme));
         } else {
-          lines.add(Padding(
-            padding: EdgeInsets.only(left: (depth + 1) * 12.0),
-            child: RichText(
-              text: TextSpan(
-                style: const TextStyle(
-                    fontSize: 11, fontFamily: 'monospace', height: 1.4),
-                children: [
-                  _valueSpan(value, theme),
-                  TextSpan(
-                    text: comma,
-                    style: TextStyle(
-                        color: theme.textTheme.bodyMedium?.color
-                            ?.withValues(alpha: 0.5)),
-                  ),
-                ],
-              ),
-            ),
-          ));
+          children.add(_valueSpan(data[i], theme));
         }
+
+        children.add(TextSpan(text: '$comma\n', style: punctuationStyle));
       }
 
-      lines.add(Text('$indent]',
-          style: TextStyle(
-              fontSize: 11,
-              fontFamily: 'monospace',
-              color:
-                  theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.5))));
-
-      return SelectionArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: lines,
-        ),
-      );
+      children.add(TextSpan(text: '$indent]', style: punctuationStyle));
+      return TextSpan(children: children);
     }
 
     // Primitive
-    return RichText(
-      text: TextSpan(
-        style:
-            const TextStyle(fontSize: 11, fontFamily: 'monospace', height: 1.4),
-        children: [_valueSpan(data, theme)],
-      ),
-    );
+    return _valueSpan(data, theme);
   }
 
   /// Returns a styled [TextSpan] for a JSON primitive value.
@@ -512,31 +400,27 @@ class _JsonViewer extends StatelessWidget {
       return TextSpan(
         text: 'null',
         style: TextStyle(
-            color: theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.4),
-            fontStyle: FontStyle.italic),
+          color: theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.4),
+          fontStyle: FontStyle.italic,
+        ),
       );
     }
     if (value is bool) {
       return TextSpan(
         text: '$value',
-        style: TextSpan(
-                text: '', style: TextStyle(color: Colors.deepPurple.shade300))
-            .style,
+        style: TextStyle(color: Colors.deepPurple.shade300),
       );
     }
     if (value is num) {
       return TextSpan(
         text: '$value',
-        style: TextSpan(text: '', style: TextStyle(color: Colors.teal.shade400))
-            .style,
+        style: TextStyle(color: Colors.teal.shade400),
       );
     }
     if (value is String) {
       return TextSpan(
         text: '"$value"',
-        style:
-            TextSpan(text: '', style: TextStyle(color: Colors.orange.shade400))
-                .style,
+        style: TextStyle(color: Colors.orange.shade400),
       );
     }
     return TextSpan(text: value.toString());

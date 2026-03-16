@@ -9,8 +9,8 @@ environment:
 dependencies:
   shelf: ^1.4.0
   shelf_router: ^1.1.0
-  comon_logger: 0.1.0
-  comon_logger_file: 0.1.0
+  comon_logger: 0.1.1
+  comon_logger_file: 0.1.1
 
 dev_dependencies:
   lints: ^4.0.0

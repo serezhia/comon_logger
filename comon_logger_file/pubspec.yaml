@@ -1,6 +1,6 @@
 name: comon_logger_file
 description: File-based log handler for comon_logger with log rotation.
-version: 0.1.0
+version: 0.1.1
 homepage: https://github.com/serezhia/comon_logger
 repository: https://github.com/serezhia/comon_logger/tree/main/comon_logger_file
 issue_tracker: https://github.com/serezhia/comon_logger/issues
@@ -13,7 +13,7 @@ environment:
   sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
-  comon_logger: ^0.1.0
+  comon_logger: ^0.1.1
 
 dev_dependencies:
   test: ^1.25.0

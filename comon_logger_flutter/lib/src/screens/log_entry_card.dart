@@ -18,6 +18,8 @@ class LogEntryCard extends StatefulWidget {
     super.key,
     required this.record,
     this.renderers = const [],
+    this.expanded = false,
+    this.onToggleExpanded,
   });
 
   final LogRecord record;
@@ -25,12 +27,18 @@ class LogEntryCard extends StatefulWidget {
   /// Custom renderers tried in order for this record.
   final List<LogRecordRenderer> renderers;
 
+  /// Whether this card is currently expanded.
+  final bool expanded;
+
+  /// Called when the user taps to toggle expansion.
+  final VoidCallback? onToggleExpanded;
+
   @override
   State<LogEntryCard> createState() => _LogEntryCardState();
 }
 
 class _LogEntryCardState extends State<LogEntryCard> {
-  bool _expanded = false;
+  bool get _expanded => widget.expanded;
 
   /// Finds the first renderer that can handle [record], or `null`.
   LogRecordRenderer? _resolveRenderer(LogRecord record) {
@@ -65,7 +73,7 @@ class _LogEntryCardState extends State<LogEntryCard> {
         ),
         child: InkWell(
           borderRadius: BorderRadius.circular(8),
-          onTap: () => setState(() => _expanded = !_expanded),
+          onTap: widget.onToggleExpanded,
           child: IntrinsicHeight(
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.stretch,

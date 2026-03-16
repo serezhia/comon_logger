@@ -27,7 +27,6 @@ final dio = Dio()
       logResponseHeaders: true,
       logRequestBody: true,
       logResponseBody: true,
-      maxResponseBodyLength: 500,
     ),
   );
 
@@ -35,7 +34,12 @@ final dio = Dio()
 
 Future<void> _initLogging() async {
   // 1) Console handler with pretty formatting
-  Logger.root.addHandler(ConsoleLogHandler(formatter: PrettyLogFormatter()));
+  Logger.root.addHandler(
+    ConsoleLogHandler(
+      formatters: const [HttpConsoleLogFormatter()],
+      formatter: PrettyLogFormatter(),
+    ),
+  );
 
   // 2) History handler for in-app log viewer
   Logger.root.addHandler(historyHandler);

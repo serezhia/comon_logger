@@ -1,6 +1,6 @@
 name: comon_logger_dio_flutter
 description: Flutter UI renderer for comon_logger Dio HTTP logs.
-version: 0.1.0
+version: 0.1.1
 homepage: https://github.com/serezhia/comon_logger
 repository: https://github.com/serezhia/comon_logger/tree/main/comon_logger_dio_flutter
 issue_tracker: https://github.com/serezhia/comon_logger/issues
@@ -17,9 +17,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  comon_logger: ^0.1.0
-  comon_logger_dio: ^0.1.0
-  comon_logger_flutter: ^0.1.0
+  comon_logger: ^0.1.1
+  comon_logger_dio: ^0.1.1
+  comon_logger_flutter: ^0.1.1
 
 dev_dependencies:
   flutter_test:

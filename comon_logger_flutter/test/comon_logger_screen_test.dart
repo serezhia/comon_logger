@@ -60,6 +60,79 @@ void main() {
       expect(find.text('2 / 2 logs'), findsOneWidget);
     });
 
+    testWidgets('shows newest logs first by default', (tester) async {
+      handler.handle(LogRecord(
+        level: LogLevel.INFO,
+        message: 'first',
+        loggerName: 'test',
+        time: DateTime.now(),
+      ));
+      handler.handle(LogRecord(
+        level: LogLevel.INFO,
+        message: 'second',
+        loggerName: 'test',
+        time: DateTime.now(),
+      ));
+
+      await tester.pumpWidget(buildApp());
+      await tester.pump();
+
+      final firstDy = tester.getTopLeft(find.text('first')).dy;
+      final secondDy = tester.getTopLeft(find.text('second')).dy;
+
+      expect(secondDy, lessThan(firstDy));
+    });
+
+    testWidgets('starts at the top of the list', (tester) async {
+      for (var index = 0; index < 30; index++) {
+        handler.handle(LogRecord(
+          level: LogLevel.INFO,
+          message: 'initial $index',
+          loggerName: 'test',
+          time: DateTime.now(),
+        ));
+      }
+
+      await tester.pumpWidget(buildApp());
+      await tester.pumpAndSettle();
+
+      final position =
+          tester.state<ScrollableState>(find.byType(Scrollable)).position;
+
+      expect(position.pixels, 0.0);
+      expect(find.text('initial 29'), findsOneWidget);
+    });
+
+    testWidgets('incoming logs do not move the current viewport by default',
+        (tester) async {
+      for (var index = 0; index < 30; index++) {
+        handler.handle(LogRecord(
+          level: LogLevel.INFO,
+          message: 'log $index',
+          loggerName: 'test',
+          time: DateTime.now(),
+        ));
+      }
+
+      await tester.pumpWidget(buildApp());
+      await tester.pumpAndSettle();
+
+      final beforeDy = tester.getTopLeft(find.text('log 29')).dy;
+
+      handler.handle(LogRecord(
+        level: LogLevel.INFO,
+        message: 'log 30',
+        loggerName: 'test',
+        time: DateTime.now(),
+      ));
+
+      await tester.pumpAndSettle();
+
+      final afterDy = tester.getTopLeft(find.text('log 29')).dy;
+
+      expect(afterDy, beforeDy);
+    });
+
     testWidgets('clear button removes all logs', (tester) async {
       handler.handle(LogRecord(
         level: LogLevel.INFO,

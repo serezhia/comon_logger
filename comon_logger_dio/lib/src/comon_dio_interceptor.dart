@@ -26,7 +26,7 @@ class ComonDioInterceptor extends Interceptor {
     this.logResponseBody = false,
     this.logRequestHeaders = false,
     this.logResponseHeaders = false,
-    this.maxResponseBodyLength = 1000,
+    this.maxResponseBodyLength,
     String loggerName = 'comon.dio',
   }) : _logger = Logger(loggerName);
 
@@ -57,9 +57,11 @@ class ComonDioInterceptor extends Interceptor {
   /// Headers are **always** stored in `extra` for the UI widget.
   final bool logResponseHeaders;
 
-  /// Maximum length of the response body in the console message
-  /// (truncated beyond this). Does not affect `extra`.
-  final int maxResponseBodyLength;
+  /// Maximum length of the response body in the console message.
+  ///
+  /// When `null`, the console message is not truncated. Does not affect
+  /// `extra`, which always keeps the full structured body.
+  final int? maxResponseBodyLength;
 
   /// Tries to parse [data] as a JSON-compatible object.
   ///
@@ -153,8 +155,9 @@ class ComonDioInterceptor extends Interceptor {
     }
     if (logResponseBody && response.data != null) {
       var body = response.data.toString();
-      if (body.length > maxResponseBodyLength) {
-        body = '${body.substring(0, maxResponseBodyLength)}... [truncated]';
+      final limit = maxResponseBodyLength;
+      if (limit != null && limit >= 0 && body.length > limit) {
+        body = '${body.substring(0, limit)}... [truncated]';
       }
       message.write('\nBody: $body');
     }

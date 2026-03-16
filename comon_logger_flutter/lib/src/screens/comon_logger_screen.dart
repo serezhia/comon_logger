@@ -41,13 +41,13 @@ class ComonLoggerScreen extends StatefulWidget {
     required this.handler,
     this.renderers = const [],
     this.actions = const [],
-    this.initialAutoScroll = true,
+    this.initialAutoScroll = false,
     this.initialSearchQuery = '',
     this.initialFilter,
     this.showSearchButton = true,
     this.showFilterButton = false,
     this.showClearButton = true,
-    this.reverseOrder = false,
+    this.reverseOrder = true,
   });
 
   /// The [HistoryLogHandler] providing log records.
@@ -65,7 +65,7 @@ class ComonLoggerScreen extends StatefulWidget {
   /// clear button. See [LogScreenAction] for the interface.
   final List<LogScreenAction> actions;
 
-  /// Initial auto-scroll state. Defaults to `true`.
+  /// Initial auto-scroll state. Defaults to `false`.
   final bool initialAutoScroll;
 
   /// Initial search query. When non-empty, the search bar is shown
@@ -86,10 +86,11 @@ class ComonLoggerScreen extends StatefulWidget {
   /// Whether to show the clear button in the toolbar.
   final bool showClearButton;
 
-  /// Show newest logs at the top (reverse chronological order).
+  /// Show newest logs at the top.
   ///
-  /// When `true`, the list is reversed so the latest log appears first.
-  /// Defaults to `false` (oldest at top, newest at bottom).
+  /// When `true`, records are rendered in reverse chronological order while
+  /// the screen still opens at the top of the list.
+  /// Defaults to `true`.
   final bool reverseOrder;
 
   @override
@@ -104,8 +105,9 @@ class _ComonLoggerScreenState extends State<ComonLoggerScreen> {
   bool _showFilters = false;
   bool _showSearch = false;
   final _searchController = TextEditingController();
-  final _scrollController = ScrollController();
+  final _scrollController = ScrollController(keepScrollOffset: false);
   bool _autoScroll = true;
+  final Set<LogRecord> _expandedRecords = {};
 
   @override
   void initState() {
@@ -124,11 +126,25 @@ class _ComonLoggerScreenState extends State<ComonLoggerScreen> {
     _records.addAll(widget.handler.history);
     _applyFilters();
 
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_scrollController.hasClients) {
+        _scrollController.jumpTo(0.0);
+      }
+    });
+
     _subscription = widget.handler.onRecord.listen((record) {
+      final preserveViewport = !_autoScroll && widget.reverseOrder;
+      final previousOffset =
+          _scrollController.hasClients ? _scrollController.offset : null;
+      final previousMaxExtent = _scrollController.hasClients
+          ? _scrollController.position.maxScrollExtent
+          : null;
+
       setState(() {
         _records.add(record);
         _applyFilters();
       });
+
       if (_autoScroll) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           if (_scrollController.hasClients) {
@@ -140,6 +156,22 @@ class _ComonLoggerScreenState extends State<ComonLoggerScreen> {
               duration: const Duration(milliseconds: 200),
               curve: Curves.easeOut,
             );
+          }
+        });
+      } else if (preserveViewport &&
+          previousOffset != null &&
+          previousMaxExtent != null) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (_scrollController.hasClients) {
+            final delta =
+                _scrollController.position.maxScrollExtent - previousMaxExtent;
+            if (delta > 0) {
+              final target = (previousOffset + delta).clamp(
+                0.0,
+                _scrollController.position.maxScrollExtent,
+              );
+              _scrollController.jumpTo(target);
+            }
           }
         });
       }
@@ -163,6 +195,7 @@ class _ComonLoggerScreenState extends State<ComonLoggerScreen> {
       widget.handler.clear();
       _records.clear();
       _filteredRecords.clear();
+      _expandedRecords.clear();
     });
   }
 
@@ -298,7 +331,6 @@ class _ComonLoggerScreenState extends State<ComonLoggerScreen> {
                   )
                 : ListView.builder(
                     controller: _scrollController,
-                    reverse: widget.reverseOrder,
                     itemCount: _filteredRecords.length,
                     padding: EdgeInsets.only(
                       top: 4,
@@ -316,8 +348,17 @@ class _ComonLoggerScreenState extends State<ComonLoggerScreen> {
                         }
                       }
                       return LogEntryCard(
+                        key: ObjectKey(rec),
                         record: rec,
                         renderers: widget.renderers,
+                        expanded: _expandedRecords.contains(rec),
+                        onToggleExpanded: () {
+                          setState(() {
+                            if (!_expandedRecords.remove(rec)) {
+                              _expandedRecords.add(rec);
+                            }
+                          });
+                        },
                       );
                     },
                   ),

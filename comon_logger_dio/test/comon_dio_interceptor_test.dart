@@ -79,6 +79,22 @@ void main() {
       expect(responseLogs.first.extra?['statusCode'], 200);
     });
 
+    test('does not truncate response body by default', () async {
+      final longBody = 'x' * 100;
+      dio.httpClientAdapter = _MockAdapter(
+        response: ResponseBody.fromString(longBody, 200),
+      );
+
+      await dio.get<dynamic>('/full-body');
+
+      final responseLogs = handler.records
+          .where((r) => r.extra?['phase'] == 'response')
+          .toList();
+      expect(responseLogs, isNotEmpty);
+      expect(responseLogs.first.message, contains(longBody));
+      expect(responseLogs.first.message, isNot(contains('[truncated]')));
+    });
+
     test('logs error', () async {
       dio.httpClientAdapter = _MockAdapter(
         throwError: true,

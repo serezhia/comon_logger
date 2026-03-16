@@ -1,34 +1,34 @@
-# comon_logger_navigation
+# comon_logger_navigation_flutter
 
-`NavigatorObserver` actor for **comon_logger** — automatically logs all route
-changes (push, pop, replace, remove) via the Logger hierarchy.
+Navigation logging package for Flutter built on top of `comon_logger`.
 
-## Setup
+## Quick Start
 
 ```dart
-import 'package:comon_logger_navigation/comon_logger_navigation.dart';
+import 'package:comon_logger_navigation_flutter/comon_logger_navigation_flutter.dart';
 
 MaterialApp(
   navigatorObservers: [ComonNavigatorObserver()],
 );
 ```
 
-## What is logged
+## What It Logs
 
-| Action    | Example message                            |
-|-----------|--------------------------------------------|
-| `PUSH`    | `PUSH: /details (from: /home)`             |
-| `POP`     | `POP: /details (from: /home)`              |
-| `REPLACE` | `REPLACE: /settings (from: /profile)`      |
-| `REMOVE`  | `REMOVE: /temp`                            |
+| Action | Example |
+|--------|---------|
+| `PUSH` | `PUSH: /details (from: /home)` |
+| `POP` | `POP: /details (from: /home)` |
+| `REPLACE` | `REPLACE: /settings (from: /profile)` |
+| `REMOVE` | `REMOVE: /temp` |
 
-All events are tagged with:
-- **Level**: `CONFIG`
-- **Layer**: `LogLayer.widgets`
-- **Type**: `LogType.navigation`
-- **Extra**: `{'action': 'PUSH', 'route': '/details', 'previousRoute': '/home'}`
+Each navigation record is emitted with:
 
-## Custom logger name
+- `LogLevel.CONFIG`
+- `LogLayer.widgets`
+- `LogType.navigation`
+- structured `extra` payload for action, route, and previous route
+
+## Custom Logger Name
 
 ```dart
 ComonNavigatorObserver(loggerName: 'my_app.navigation')
