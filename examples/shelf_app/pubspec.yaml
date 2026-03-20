@@ -2,6 +2,7 @@ name: shelf_app_example
 description: Shelf server example demonstrating comon_logger for backend applications.
 publish_to: 'none'
 version: 1.0.0
+resolution: workspace
 
 environment:
   sdk: ^3.10.8
@@ -13,4 +14,4 @@ dependencies:
   comon_logger_file: 0.1.1
 
 dev_dependencies:
-  lints: ^4.0.0
+  lints: ^6.0.0

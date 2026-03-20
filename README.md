@@ -18,13 +18,13 @@ and navigation tracking.
 
 | Package | Use it for | pub.dev |
 |---------|------------|---------|
-| [comon_logger](comon_logger/) | Core logging primitives, handlers, filters, formatters, logger hierarchy | [![pub](https://img.shields.io/pub/v/comon_logger.svg)](https://pub.dev/packages/comon_logger) |
-| [comon_logger_flutter](comon_logger_flutter/) | In-app Flutter log screen, `HistoryLogHandler`, DevTools service extension | [![pub](https://img.shields.io/pub/v/comon_logger_flutter.svg)](https://pub.dev/packages/comon_logger_flutter) |
-| [comon_logger_dio](comon_logger_dio/) | Dio interceptor plus rich HTTP console formatter | [![pub](https://img.shields.io/pub/v/comon_logger_dio.svg)](https://pub.dev/packages/comon_logger_dio) |
-| [comon_logger_dio_flutter](comon_logger_dio_flutter/) | HTTP renderer for `ComonLoggerScreen` | [![pub](https://img.shields.io/pub/v/comon_logger_dio_flutter.svg)](https://pub.dev/packages/comon_logger_dio_flutter) |
-| [comon_logger_file](comon_logger_file/) | Rotating file logs for Dart and Flutter | [![pub](https://img.shields.io/pub/v/comon_logger_file.svg)](https://pub.dev/packages/comon_logger_file) |
-| [comon_logger_share_flutter](comon_logger_share_flutter/) | Share/export action for the Flutter log viewer | [![pub](https://img.shields.io/pub/v/comon_logger_share_flutter.svg)](https://pub.dev/packages/comon_logger_share_flutter) |
-| [comon_logger_navigation_flutter](comon_logger_navigation_flutter/) | `NavigatorObserver` with structured navigation logs | [![pub](https://img.shields.io/pub/v/comon_logger_navigation_flutter.svg)](https://pub.dev/packages/comon_logger_navigation_flutter) |
+| [comon_logger](packages/comon_logger/) | Core logging primitives, handlers, filters, formatters, logger hierarchy | [![pub](https://img.shields.io/pub/v/comon_logger.svg)](https://pub.dev/packages/comon_logger) |
+| [comon_logger_flutter](packages/comon_logger_flutter/) | In-app Flutter log screen, `HistoryLogHandler`, DevTools service extension | [![pub](https://img.shields.io/pub/v/comon_logger_flutter.svg)](https://pub.dev/packages/comon_logger_flutter) |
+| [comon_logger_dio](packages/comon_logger_dio/) | Dio interceptor plus rich HTTP console formatter | [![pub](https://img.shields.io/pub/v/comon_logger_dio.svg)](https://pub.dev/packages/comon_logger_dio) |
+| [comon_logger_dio_flutter](packages/comon_logger_dio_flutter/) | HTTP renderer for `ComonLoggerScreen` | [![pub](https://img.shields.io/pub/v/comon_logger_dio_flutter.svg)](https://pub.dev/packages/comon_logger_dio_flutter) |
+| [comon_logger_file](packages/comon_logger_file/) | Rotating file logs for Dart and Flutter | [![pub](https://img.shields.io/pub/v/comon_logger_file.svg)](https://pub.dev/packages/comon_logger_file) |
+| [comon_logger_share_flutter](packages/comon_logger_share_flutter/) | Share/export action for the Flutter log viewer | [![pub](https://img.shields.io/pub/v/comon_logger_share_flutter.svg)](https://pub.dev/packages/comon_logger_share_flutter) |
+| [comon_logger_navigation_flutter](packages/comon_logger_navigation_flutter/) | `NavigatorObserver` with structured navigation logs | [![pub](https://img.shields.io/pub/v/comon_logger_navigation_flutter.svg)](https://pub.dev/packages/comon_logger_navigation_flutter) |
 
 ## Ecosystem Layout
 
@@ -97,24 +97,23 @@ Logger.root.addHandler(ConsoleLogHandler(
 
 ## Development
 
-This mono-repo is managed with [Melos](https://melos.invertase.dev/).
+This repository uses a Dart workspace plus Melos from the root `pubspec.yaml`.
 
 ```bash
-git clone https://github.com/serezhia/comon_logger.git
-cd comon_logger
-melos bootstrap
-melos run test
+dart pub get
+dart run melos bootstrap
+dart run melos run test
 ```
 
 Useful commands:
 
 ```bash
-melos run test
-melos run test:dart
-melos run test:flutter
-melos run analyze
-melos run format
-melos run publish:dry
+dart run melos run test
+dart run melos run test:dart
+dart run melos run test:flutter
+dart run melos run analyze
+dart run melos run format
+dart run melos run publish:dry-run
 ```
 
 ## Publishing Notes

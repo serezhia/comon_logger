@@ -2,6 +2,7 @@ name: flutter_app_example
 description: Flutter example app demonstrating comon_logger packages.
 publish_to: 'none'
 version: 1.0.0+1
+resolution: workspace
 
 environment:
   sdk: ^3.10.8

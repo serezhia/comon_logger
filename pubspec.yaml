@@ -1,9 +1,70 @@
-name: comon_logger_workspace
-description: Workspace root for comon_logger mono-repo.
-publish_to: "none"
+name: _
+description: Root workspace for the comon_logger monorepo.
+publish_to: none
+repository: https://github.com/serezhia/comon_logger
 
 environment:
-  sdk: ">=3.0.0 <4.0.0"
+  sdk: ^3.9.0
+
+workspace:
+  - packages/comon_logger
+  - packages/comon_logger_flutter
+  - packages/comon_logger_dio
+  - packages/comon_logger_dio_flutter
+  - packages/comon_logger_file
+  - packages/comon_logger_share_flutter
+  - packages/comon_logger_navigation_flutter
+  - packages/comon_logger_devtools_extension
+  - examples/flutter_app
+  - examples/shelf_app
 
 dev_dependencies:
-  melos: ^6.3.2
+  melos: ^7.0.0
+
+melos:
+  repository: https://github.com/serezhia/comon_logger
+  categories:
+    dart-package:
+      - packages/comon_logger
+      - packages/comon_logger_dio
+      - packages/comon_logger_file
+      - examples/shelf_app
+    flutter-package:
+      - packages/comon_logger_flutter
+      - packages/comon_logger_dio_flutter
+      - packages/comon_logger_share_flutter
+      - packages/comon_logger_navigation_flutter
+      - packages/comon_logger_devtools_extension
+      - examples/flutter_app
+  command:
+    bootstrap:
+      runPubGetInParallel: true
+    version:
+      branch: main
+      fetchTags: false
+      workspaceChangelog: true
+  scripts:
+    analyze:
+      description: Analyze all workspace packages and examples.
+      run: dart run melos exec --fail-fast -- "dart analyze ."
+    test:
+      description: Run Dart and Flutter package tests.
+      run: dart run melos run test:dart && dart run melos run test:flutter
+    test:dart:
+      description: Run tests for pure Dart packages.
+      run: dart run melos exec --fail-fast --category=dart-package --dir-exists=test -- "dart test"
+    test:flutter:
+      description: Run tests for Flutter packages.
+      run: dart run melos exec --fail-fast --category=flutter-package --dir-exists=test -- "flutter test"
+    format:
+      description: Format all workspace packages and examples.
+      run: dart run melos exec --fail-fast -- "dart format ."
+    publish:
+      description: Validate publishability without uploading packages.
+      run: dart run melos exec --fail-fast --no-private -- "dart pub publish --dry-run"
+    publish:dry-run:
+      description: Validate publishability without uploading packages.
+      run: dart run melos exec --fail-fast --no-private -- "dart pub publish --dry-run"
+    publish:dry:
+      description: Backward-compatible alias for dry-run publish validation.
+      run: dart run melos run publish:dry-run
