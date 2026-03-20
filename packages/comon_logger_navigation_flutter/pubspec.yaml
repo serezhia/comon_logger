@@ -1,0 +1,27 @@
+name: comon_logger_navigation_flutter
+description: NavigatorObserver for comon_logger — logs route changes with beautiful Flutter UI.
+version: 0.1.2
+resolution: workspace
+homepage: https://github.com/serezhia/comon_logger
+repository: https://github.com/serezhia/comon_logger/tree/main/packages/comon_logger_navigation_flutter
+issue_tracker: https://github.com/serezhia/comon_logger/issues
+topics:
+  - logging
+  - navigation
+  - flutter
+  - routes
+
+environment:
+  sdk: ^3.9.0
+  flutter: ">=3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  comon_logger: ^0.1.2
+  comon_logger_flutter: ^0.1.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0

@@ -1,21 +1,31 @@
-# Dart/Flutter
+# Dart and Flutter tool state
 .dart_tool/
+**/.dart_tool/
 .packages
-build/
-*.iml
-.idea/
-.vscode/
-
-# Coverage
-coverage/
-
-# Melos
-pubspec_overrides.yaml
-
-# Pub
 .pub/
 pubspec.lock
 
-# OS
+# Build and coverage outputs
+build/
+**/build/
+coverage/
+**/coverage/
+
+# Local dependency overrides used only for monorepo development
+**/pubspec_overrides.yaml
+
+# IDE and OS artifacts
+.fvm/
+.idea/
+**/.idea/
+.vscode/settings.json
+.vscode/*.local.json
+*.local.code-workspace
+*.iml
 .DS_Store
+**/.DS_Store
 Thumbs.db
+
+# Logs and temp files
+*.log
+*.tmp

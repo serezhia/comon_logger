@@ -1,0 +1,5 @@
+name: comon_logger
+issueTracker: https://github.com/serezhia/comon_logger/issues
+version: 0.1.2
+materialIconCodePoint: "0xe0b0"
+requiresConnection: false
