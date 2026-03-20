@@ -134,8 +134,9 @@ class _ComonLoggerScreenState extends State<ComonLoggerScreen> {
 
     _subscription = widget.handler.onRecord.listen((record) {
       final preserveViewport = !_autoScroll && widget.reverseOrder;
-      final previousOffset =
-          _scrollController.hasClients ? _scrollController.offset : null;
+      final previousOffset = _scrollController.hasClients
+          ? _scrollController.offset
+          : null;
       final previousMaxExtent = _scrollController.hasClients
           ? _scrollController.position.maxScrollExtent
           : null;
@@ -301,11 +302,9 @@ class _ComonLoggerScreenState extends State<ComonLoggerScreen> {
                   '${_filteredRecords.length} / ${_records.length} logs',
                   style: TextStyle(
                     fontSize: 11,
-                    color: Theme.of(context)
-                        .textTheme
-                        .bodySmall
-                        ?.color
-                        ?.withValues(alpha: 0.7),
+                    color: Theme.of(
+                      context,
+                    ).textTheme.bodySmall?.color?.withValues(alpha: 0.7),
                   ),
                 ),
               ],
@@ -321,12 +320,10 @@ class _ComonLoggerScreenState extends State<ComonLoggerScreen> {
                           ? 'No logs yet'
                           : 'No logs match filters',
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            color: Theme.of(context)
-                                .textTheme
-                                .bodySmall
-                                ?.color
-                                ?.withValues(alpha: 0.5),
-                          ),
+                        color: Theme.of(
+                          context,
+                        ).textTheme.bodySmall?.color?.withValues(alpha: 0.5),
+                      ),
                     ),
                   )
                 : ListView.builder(

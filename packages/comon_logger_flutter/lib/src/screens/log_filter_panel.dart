@@ -10,9 +10,9 @@ class LogFilterState {
     this.featureQuery = '',
     this.loggerNameQuery = '',
     this.searchQuery = '',
-  })  : levels = levels ?? {},
-        layers = layers ?? {},
-        types = types ?? {};
+  }) : levels = levels ?? {},
+       layers = layers ?? {},
+       types = types ?? {};
 
   final Set<LogLevel> levels;
   final Set<LogLayer> layers;
@@ -46,15 +46,15 @@ class LogFilterState {
     }
     if (featureQuery.isNotEmpty &&
         (record.feature == null ||
-            !record.feature!
-                .toLowerCase()
-                .contains(featureQuery.toLowerCase()))) {
+            !record.feature!.toLowerCase().contains(
+              featureQuery.toLowerCase(),
+            ))) {
       return false;
     }
     if (loggerNameQuery.isNotEmpty &&
-        !record.loggerName
-            .toLowerCase()
-            .contains(loggerNameQuery.toLowerCase())) {
+        !record.loggerName.toLowerCase().contains(
+          loggerNameQuery.toLowerCase(),
+        )) {
       return false;
     }
     if (searchQuery.isNotEmpty) {
@@ -193,8 +193,10 @@ class LogFilterPanel extends StatelessWidget {
                   decoration: const InputDecoration(
                     labelText: 'Feature',
                     isDense: true,
-                    contentPadding:
-                        EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 8,
+                    ),
                     border: OutlineInputBorder(),
                   ),
                   style: const TextStyle(fontSize: 13),
@@ -208,13 +210,16 @@ class LogFilterPanel extends StatelessWidget {
                   decoration: const InputDecoration(
                     labelText: 'Logger name',
                     isDense: true,
-                    contentPadding:
-                        EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 8,
+                    ),
                     border: OutlineInputBorder(),
                   ),
                   style: const TextStyle(fontSize: 13),
                   onChanged: (val) => onFilterChanged(
-                      filterState.copyWith(loggerNameQuery: val)),
+                    filterState.copyWith(loggerNameQuery: val),
+                  ),
                 ),
               ),
             ],
@@ -228,8 +233,10 @@ class LogFilterPanel extends StatelessWidget {
               child: TextButton.icon(
                 onPressed: () => onFilterChanged(LogFilterState()),
                 icon: const Icon(Icons.clear_all, size: 18),
-                label:
-                    const Text('Reset filters', style: TextStyle(fontSize: 12)),
+                label: const Text(
+                  'Reset filters',
+                  style: TextStyle(fontSize: 12),
+                ),
               ),
             ),
         ],
@@ -250,11 +257,9 @@ class LogFilterPanel extends StatelessWidget {
           style: TextStyle(
             fontSize: 11,
             fontWeight: FontWeight.w600,
-            color: Theme.of(context)
-                .textTheme
-                .bodySmall
-                ?.color
-                ?.withValues(alpha: 0.7),
+            color: Theme.of(
+              context,
+            ).textTheme.bodySmall?.color?.withValues(alpha: 0.7),
           ),
         ),
         const SizedBox(height: 2),

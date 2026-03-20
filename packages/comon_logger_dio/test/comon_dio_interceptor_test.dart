@@ -26,10 +26,9 @@ void main() {
     Logger.root.addHandler(handler);
 
     dio = Dio(BaseOptions(baseUrl: 'https://example.com'));
-    dio.interceptors.add(ComonDioInterceptor(
-      logRequestBody: true,
-      logResponseBody: true,
-    ));
+    dio.interceptors.add(
+      ComonDioInterceptor(logRequestBody: true, logResponseBody: true),
+    );
   });
 
   tearDown(() {
@@ -43,8 +42,11 @@ void main() {
       final childLogger = Logger('comon.dio');
       childLogger.info('direct test');
 
-      expect(handler.records, isNotEmpty,
-          reason: 'Logger hierarchy should propagate to root');
+      expect(
+        handler.records,
+        isNotEmpty,
+        reason: 'Logger hierarchy should propagate to root',
+      );
       expect(handler.records.first.message, 'direct test');
     });
 
@@ -56,8 +58,9 @@ void main() {
 
       await dio.get<dynamic>('/test');
 
-      final requestLogs =
-          handler.records.where((r) => r.extra?['phase'] == 'request').toList();
+      final requestLogs = handler.records
+          .where((r) => r.extra?['phase'] == 'request')
+          .toList();
       expect(requestLogs, isNotEmpty);
       expect(requestLogs.first.message, contains('GET'));
       expect(requestLogs.first.message, contains('/test'));
@@ -96,9 +99,7 @@ void main() {
     });
 
     test('logs error', () async {
-      dio.httpClientAdapter = _MockAdapter(
-        throwError: true,
-      );
+      dio.httpClientAdapter = _MockAdapter(throwError: true);
 
       try {
         await dio.get<dynamic>('/fail');
@@ -106,34 +107,35 @@ void main() {
         // Expected
       }
 
-      final errorLogs =
-          handler.records.where((r) => r.extra?['phase'] == 'error').toList();
+      final errorLogs = handler.records
+          .where((r) => r.extra?['phase'] == 'error')
+          .toList();
       expect(errorLogs, isNotEmpty);
       expect(errorLogs.first.level, LogLevel.SEVERE);
     });
 
     test('requestFilter suppresses request logging', () async {
       dio.interceptors.clear();
-      dio.interceptors.add(ComonDioInterceptor(
-        requestFilter: (options) => false,
-      ));
+      dio.interceptors.add(
+        ComonDioInterceptor(requestFilter: (options) => false),
+      );
       dio.httpClientAdapter = _MockAdapter(
         response: ResponseBody.fromString('ok', 200),
       );
 
       await dio.get<dynamic>('/filtered');
 
-      final requestLogs =
-          handler.records.where((r) => r.extra?['phase'] == 'request').toList();
+      final requestLogs = handler.records
+          .where((r) => r.extra?['phase'] == 'request')
+          .toList();
       expect(requestLogs, isEmpty);
     });
 
     test('truncates long response body', () async {
       dio.interceptors.clear();
-      dio.interceptors.add(ComonDioInterceptor(
-        logResponseBody: true,
-        maxResponseBodyLength: 20,
-      ));
+      dio.interceptors.add(
+        ComonDioInterceptor(logResponseBody: true, maxResponseBodyLength: 20),
+      );
 
       final longBody = 'x' * 100;
       dio.httpClientAdapter = _MockAdapter(

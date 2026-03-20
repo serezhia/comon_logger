@@ -24,25 +24,25 @@ class ComonLoggerServiceExtension {
     });
 
     // Service extension: get current history
-    developer.registerExtension(
-      'ext.comon_logger.getHistory',
-      (method, params) async {
-        final records = _historyHandler.history.map((r) => r.toJson()).toList();
-        return developer.ServiceExtensionResponse.result(
-          jsonEncode({'logs': records}),
-        );
-      },
-    );
+    developer.registerExtension('ext.comon_logger.getHistory', (
+      method,
+      params,
+    ) async {
+      final records = _historyHandler.history.map((r) => r.toJson()).toList();
+      return developer.ServiceExtensionResponse.result(
+        jsonEncode({'logs': records}),
+      );
+    });
 
     // Service extension: clear history
-    developer.registerExtension(
-      'ext.comon_logger.clearHistory',
-      (method, params) async {
-        _historyHandler.clear();
-        return developer.ServiceExtensionResponse.result(
-          jsonEncode({'success': true}),
-        );
-      },
-    );
+    developer.registerExtension('ext.comon_logger.clearHistory', (
+      method,
+      params,
+    ) async {
+      _historyHandler.clear();
+      return developer.ServiceExtensionResponse.result(
+        jsonEncode({'success': true}),
+      );
+    });
   }
 }

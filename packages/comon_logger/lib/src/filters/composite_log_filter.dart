@@ -18,7 +18,7 @@ class CompositeLogFilter extends LogFilter {
 
   @override
   bool shouldLog(LogRecord record) => switch (mode) {
-        CompositeMode.and => filters.every((f) => f.shouldLog(record)),
-        CompositeMode.or => filters.any((f) => f.shouldLog(record)),
-      };
+    CompositeMode.and => filters.every((f) => f.shouldLog(record)),
+    CompositeMode.or => filters.any((f) => f.shouldLog(record)),
+  };
 }

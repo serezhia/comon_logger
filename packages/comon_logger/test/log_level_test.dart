@@ -32,7 +32,9 @@ void main() {
     test('values are in ascending order', () {
       for (var i = 0; i < LogLevel.values.length - 1; i++) {
         expect(
-            LogLevel.values[i].value, lessThan(LogLevel.values[i + 1].value));
+          LogLevel.values[i].value,
+          lessThan(LogLevel.values[i + 1].value),
+        );
       }
     });
 

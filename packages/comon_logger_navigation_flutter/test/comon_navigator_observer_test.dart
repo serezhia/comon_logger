@@ -33,11 +33,11 @@ void main() {
         initialRoute: '/',
         routes: {
           '/': (_) => Builder(
-                builder: (context) => ElevatedButton(
-                  onPressed: () => Navigator.of(context).pushNamed('/details'),
-                  child: const Text('Go'),
-                ),
-              ),
+            builder: (context) => ElevatedButton(
+              onPressed: () => Navigator.of(context).pushNamed('/details'),
+              child: const Text('Go'),
+            ),
+          ),
           '/details': (_) => const Text('Details'),
         },
       ),
@@ -70,17 +70,17 @@ void main() {
         initialRoute: '/',
         routes: {
           '/': (_) => Builder(
-                builder: (context) => ElevatedButton(
-                  onPressed: () => Navigator.of(context).pushNamed('/details'),
-                  child: const Text('Go'),
-                ),
-              ),
+            builder: (context) => ElevatedButton(
+              onPressed: () => Navigator.of(context).pushNamed('/details'),
+              child: const Text('Go'),
+            ),
+          ),
           '/details': (_) => Builder(
-                builder: (context) => ElevatedButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: const Text('Back'),
-                ),
-              ),
+            builder: (context) => ElevatedButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('Back'),
+            ),
+          ),
         },
       ),
     );
@@ -108,12 +108,12 @@ void main() {
         initialRoute: '/',
         routes: {
           '/': (_) => Builder(
-                builder: (context) => ElevatedButton(
-                  onPressed: () =>
-                      Navigator.of(context).pushReplacementNamed('/settings'),
-                  child: const Text('Replace'),
-                ),
-              ),
+            builder: (context) => ElevatedButton(
+              onPressed: () =>
+                  Navigator.of(context).pushReplacementNamed('/settings'),
+              child: const Text('Replace'),
+            ),
+          ),
           '/settings': (_) => const Text('Settings'),
         },
       ),

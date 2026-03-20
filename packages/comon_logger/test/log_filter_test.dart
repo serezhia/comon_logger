@@ -107,52 +107,55 @@ void main() {
       // Both pass
       expect(
         filter.shouldLog(
-            _makeRecord(level: LogLevel.INFO, type: LogType.network)),
+          _makeRecord(level: LogLevel.INFO, type: LogType.network),
+        ),
         isTrue,
       );
 
       // Level fails
       expect(
         filter.shouldLog(
-            _makeRecord(level: LogLevel.FINE, type: LogType.network)),
+          _makeRecord(level: LogLevel.FINE, type: LogType.network),
+        ),
         isFalse,
       );
 
       // Type fails
       expect(
         filter.shouldLog(
-            _makeRecord(level: LogLevel.INFO, type: LogType.navigation)),
+          _makeRecord(level: LogLevel.INFO, type: LogType.navigation),
+        ),
         isFalse,
       );
     });
 
     test('OR mode: at least one must pass', () {
-      final filter = CompositeLogFilter(
-        [
-          const LevelLogFilter(LogLevel.SEVERE),
-          TypeLogFilter({LogType.network}),
-        ],
-        mode: CompositeMode.or,
-      );
+      final filter = CompositeLogFilter([
+        const LevelLogFilter(LogLevel.SEVERE),
+        TypeLogFilter({LogType.network}),
+      ], mode: CompositeMode.or);
 
       // Level passes
       expect(
         filter.shouldLog(
-            _makeRecord(level: LogLevel.SEVERE, type: LogType.navigation)),
+          _makeRecord(level: LogLevel.SEVERE, type: LogType.navigation),
+        ),
         isTrue,
       );
 
       // Type passes
       expect(
         filter.shouldLog(
-            _makeRecord(level: LogLevel.FINE, type: LogType.network)),
+          _makeRecord(level: LogLevel.FINE, type: LogType.network),
+        ),
         isTrue,
       );
 
       // Neither passes
       expect(
         filter.shouldLog(
-            _makeRecord(level: LogLevel.FINE, type: LogType.navigation)),
+          _makeRecord(level: LogLevel.FINE, type: LogType.navigation),
+        ),
         isFalse,
       );
     });

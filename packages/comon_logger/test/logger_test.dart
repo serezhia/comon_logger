@@ -86,8 +86,9 @@ void main() {
     });
 
     test('handler filter is respected', () {
-      final filteredHandler =
-          _TestHandler(filter: const LevelLogFilter(LogLevel.WARNING));
+      final filteredHandler = _TestHandler(
+        filter: const LevelLogFilter(LogLevel.WARNING),
+      );
       final log = Logger('test.handler.filter');
       log.addHandler(filteredHandler);
 
@@ -150,7 +151,9 @@ void main() {
       deep.info('deep message');
 
       expect(
-          rootHandler.records.any((r) => r.message == 'deep message'), isTrue);
+        rootHandler.records.any((r) => r.message == 'deep message'),
+        isTrue,
+      );
     });
 
     test('parent handler also receives child records', () {
@@ -161,10 +164,14 @@ void main() {
       final child = Logger('test.hierarchy.parent.child');
       child.info('child message');
 
-      expect(parentHandler.records.any((r) => r.message == 'child message'),
-          isTrue);
       expect(
-          rootHandler.records.any((r) => r.message == 'child message'), isTrue);
+        parentHandler.records.any((r) => r.message == 'child message'),
+        isTrue,
+      );
+      expect(
+        rootHandler.records.any((r) => r.message == 'child message'),
+        isTrue,
+      );
 
       parent.clearHandlers();
     });

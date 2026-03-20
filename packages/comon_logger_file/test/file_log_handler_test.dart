@@ -23,11 +23,11 @@ void main() {
   });
 
   LogRecord makeRecord(String message) => LogRecord(
-        level: LogLevel.INFO,
-        message: message,
-        loggerName: 'test',
-        time: DateTime(2025, 1, 1, 12, 0, 0),
-      );
+    level: LogLevel.INFO,
+    message: message,
+    loggerName: 'test',
+    time: DateTime(2025, 1, 1, 12, 0, 0),
+  );
 
   test('init creates directory if not exists', () async {
     final subDir = '${tempDir.path}/sub/logs';
@@ -70,10 +70,7 @@ void main() {
   });
 
   test('writes JSON when writeAsJson is true', () async {
-    handler = FileLogHandler(
-      directory: tempDir.path,
-      writeAsJson: true,
-    );
+    handler = FileLogHandler(directory: tempDir.path, writeAsJson: true);
     await handler.init();
 
     handler.handle(makeRecord('JSON test'));

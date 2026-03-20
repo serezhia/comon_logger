@@ -40,13 +40,16 @@ void main() {
     );
 
     final printed = <String>[];
-    await runZoned(() async {
-      handler.handle(record);
-    }, zoneSpecification: ZoneSpecification(
-      print: (self, parent, zone, line) {
-        printed.add(line);
+    await runZoned(
+      () async {
+        handler.handle(record);
       },
-    ));
+      zoneSpecification: ZoneSpecification(
+        print: (self, parent, zone, line) {
+          printed.add(line);
+        },
+      ),
+    );
 
     expect(printed, ['1234', '5678', '9']);
   });
@@ -58,13 +61,16 @@ void main() {
     );
 
     final printed = <String>[];
-    await runZoned(() async {
-      handler.handle(record);
-    }, zoneSpecification: ZoneSpecification(
-      print: (self, parent, zone, line) {
-        printed.add(line);
+    await runZoned(
+      () async {
+        handler.handle(record);
       },
-    ));
+      zoneSpecification: ZoneSpecification(
+        print: (self, parent, zone, line) {
+          printed.add(line);
+        },
+      ),
+    );
 
     expect(printed, ['abc', 'd', 'efg', 'hi']);
   });
@@ -78,13 +84,16 @@ void main() {
     );
 
     final printed = <String>[];
-    await runZoned(() async {
-      handler.handle(record);
-    }, zoneSpecification: ZoneSpecification(
-      print: (self, parent, zone, line) {
-        printed.add(line);
+    await runZoned(
+      () async {
+        handler.handle(record);
       },
-    ));
+      zoneSpecification: ZoneSpecification(
+        print: (self, parent, zone, line) {
+          printed.add(line);
+        },
+      ),
+    );
 
     expect(printed, ['special']);
   });
@@ -98,13 +107,16 @@ void main() {
     );
 
     final printed = <String>[];
-    await runZoned(() async {
-      handler.handle(record);
-    }, zoneSpecification: ZoneSpecification(
-      print: (self, parent, zone, line) {
-        printed.add(line);
+    await runZoned(
+      () async {
+        handler.handle(record);
       },
-    ));
+      zoneSpecification: ZoneSpecification(
+        print: (self, parent, zone, line) {
+          printed.add(line);
+        },
+      ),
+    );
 
     expect(printed, ['fallback']);
   });

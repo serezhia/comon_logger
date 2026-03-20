@@ -145,8 +145,9 @@ class _CollapsibleSectionState extends State<_CollapsibleSection> {
                       ? Icons.keyboard_arrow_down
                       : Icons.keyboard_arrow_right,
                   size: 18,
-                  color:
-                      theme.textTheme.bodySmall?.color?.withValues(alpha: 0.6),
+                  color: theme.textTheme.bodySmall?.color?.withValues(
+                    alpha: 0.6,
+                  ),
                 ),
                 const SizedBox(width: 4),
                 Icon(widget.icon, size: 14, color: widget.iconColor),
@@ -156,8 +157,9 @@ class _CollapsibleSectionState extends State<_CollapsibleSection> {
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
-                    color: theme.textTheme.bodySmall?.color
-                        ?.withValues(alpha: 0.8),
+                    color: theme.textTheme.bodySmall?.color?.withValues(
+                      alpha: 0.8,
+                    ),
                   ),
                 ),
               ],
@@ -279,8 +281,9 @@ class _JsonViewer extends StatelessWidget {
                 child: Icon(
                   Icons.copy_rounded,
                   size: 14,
-                  color:
-                      theme.textTheme.bodySmall?.color?.withValues(alpha: 0.5),
+                  color: theme.textTheme.bodySmall?.color?.withValues(
+                    alpha: 0.5,
+                  ),
                 ),
               ),
             ),
@@ -341,10 +344,12 @@ class _JsonViewer extends StatelessWidget {
         final comma = i < entries.length - 1 ? ',' : '';
 
         children.add(TextSpan(text: childIndent));
-        children.add(TextSpan(
-          text: '"${entry.key}"',
-          style: TextStyle(color: theme.colorScheme.primary),
-        ));
+        children.add(
+          TextSpan(
+            text: '"${entry.key}"',
+            style: TextStyle(color: theme.colorScheme.primary),
+          ),
+        );
         children.add(TextSpan(text: ': ', style: punctuationStyle));
 
         if (entry.value is Map || entry.value is List) {

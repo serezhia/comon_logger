@@ -11,8 +11,8 @@ class ConsoleLogHandler extends LogHandler {
     LogFormatter? formatter,
     List<LogFormatter> formatters = const [],
     this.maxLineLength = 800,
-  })  : _formatter = formatter ?? const PrettyLogFormatter(),
-        _formatters = List.unmodifiable(formatters);
+  }) : _formatter = formatter ?? const PrettyLogFormatter(),
+       _formatters = List.unmodifiable(formatters);
 
   final LogFormatter _formatter;
   final List<LogFormatter> _formatters;

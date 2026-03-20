@@ -30,13 +30,7 @@ class LogLayer {
 
   /// All known layers (predefined + registered custom ones).
   /// Custom layers can be added via [register].
-  static final List<LogLayer> _values = [
-    data,
-    domain,
-    widgets,
-    app,
-    infra,
-  ];
+  static final List<LogLayer> _values = [data, domain, widgets, app, infra];
 
   /// Returns an unmodifiable view of all registered layers.
   static List<LogLayer> get values => List.unmodifiable(_values);

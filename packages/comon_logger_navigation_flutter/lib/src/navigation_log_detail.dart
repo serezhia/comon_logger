@@ -62,12 +62,18 @@ class NavigationLogDetail extends StatelessWidget {
   /// For POP: from = route being popped, to = previousRoute (destination).
   /// For others: from = previousRoute, to = route.
   static String _transitionFrom(
-      String action, String route, String previousRoute) {
+    String action,
+    String route,
+    String previousRoute,
+  ) {
     return action == 'POP' ? route : previousRoute;
   }
 
   static String _transitionTo(
-      String action, String route, String previousRoute) {
+    String action,
+    String route,
+    String previousRoute,
+  ) {
     return action == 'POP' ? previousRoute : route;
   }
 
@@ -145,34 +151,22 @@ class _RouteTransition extends StatelessWidget {
     final color = NavigationLogDetail._actionColor(action);
     final dimColor =
         theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.5) ??
-            Colors.grey;
+        Colors.grey;
 
     return Row(
       children: [
         // From route
         Expanded(
-          child: _RouteChip(
-            route: fromRoute,
-            color: dimColor,
-            faded: true,
-          ),
+          child: _RouteChip(route: fromRoute, color: dimColor, faded: true),
         ),
         // Arrow
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8),
-          child: Icon(
-            Icons.arrow_forward_rounded,
-            size: 18,
-            color: color,
-          ),
+          child: Icon(Icons.arrow_forward_rounded, size: 18, color: color),
         ),
         // To route
         Expanded(
-          child: _RouteChip(
-            route: toRoute,
-            color: color,
-            faded: false,
-          ),
+          child: _RouteChip(route: toRoute, color: color, faded: false),
         ),
       ],
     );
@@ -218,9 +212,7 @@ class _RouteChip extends StatelessWidget {
       decoration: BoxDecoration(
         color: color.withValues(alpha: faded ? 0.06 : 0.1),
         borderRadius: BorderRadius.circular(6),
-        border: Border.all(
-          color: color.withValues(alpha: faded ? 0.15 : 0.3),
-        ),
+        border: Border.all(color: color.withValues(alpha: faded ? 0.15 : 0.3)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,

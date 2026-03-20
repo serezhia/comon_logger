@@ -13,8 +13,6 @@ class ComonLoggerDevToolsApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const DevToolsExtension(
-      child: ComonLoggerDevToolsPanel(),
-    );
+    return const DevToolsExtension(child: ComonLoggerDevToolsPanel());
   }
 }

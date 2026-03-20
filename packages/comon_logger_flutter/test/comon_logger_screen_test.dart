@@ -15,9 +15,7 @@ void main() {
   });
 
   Widget buildApp() {
-    return MaterialApp(
-      home: ComonLoggerScreen(handler: handler),
-    );
+    return MaterialApp(home: ComonLoggerScreen(handler: handler));
   }
 
   group('ComonLoggerScreen', () {
@@ -27,12 +25,14 @@ void main() {
     });
 
     testWidgets('shows log message', (tester) async {
-      handler.handle(LogRecord(
-        level: LogLevel.INFO,
-        message: 'Hello World',
-        loggerName: 'test',
-        time: DateTime.now(),
-      ));
+      handler.handle(
+        LogRecord(
+          level: LogLevel.INFO,
+          message: 'Hello World',
+          loggerName: 'test',
+          time: DateTime.now(),
+        ),
+      );
 
       await tester.pumpWidget(buildApp());
       await tester.pump();
@@ -41,18 +41,22 @@ void main() {
     });
 
     testWidgets('shows log count in status bar', (tester) async {
-      handler.handle(LogRecord(
-        level: LogLevel.INFO,
-        message: 'msg1',
-        loggerName: 'test',
-        time: DateTime.now(),
-      ));
-      handler.handle(LogRecord(
-        level: LogLevel.WARNING,
-        message: 'msg2',
-        loggerName: 'test',
-        time: DateTime.now(),
-      ));
+      handler.handle(
+        LogRecord(
+          level: LogLevel.INFO,
+          message: 'msg1',
+          loggerName: 'test',
+          time: DateTime.now(),
+        ),
+      );
+      handler.handle(
+        LogRecord(
+          level: LogLevel.WARNING,
+          message: 'msg2',
+          loggerName: 'test',
+          time: DateTime.now(),
+        ),
+      );
 
       await tester.pumpWidget(buildApp());
       await tester.pump();
@@ -61,18 +65,22 @@ void main() {
     });
 
     testWidgets('shows newest logs first by default', (tester) async {
-      handler.handle(LogRecord(
-        level: LogLevel.INFO,
-        message: 'first',
-        loggerName: 'test',
-        time: DateTime.now(),
-      ));
-      handler.handle(LogRecord(
-        level: LogLevel.INFO,
-        message: 'second',
-        loggerName: 'test',
-        time: DateTime.now(),
-      ));
+      handler.handle(
+        LogRecord(
+          level: LogLevel.INFO,
+          message: 'first',
+          loggerName: 'test',
+          time: DateTime.now(),
+        ),
+      );
+      handler.handle(
+        LogRecord(
+          level: LogLevel.INFO,
+          message: 'second',
+          loggerName: 'test',
+          time: DateTime.now(),
+        ),
+      );
 
       await tester.pumpWidget(buildApp());
       await tester.pump();
@@ -85,33 +93,39 @@ void main() {
 
     testWidgets('starts at the top of the list', (tester) async {
       for (var index = 0; index < 30; index++) {
-        handler.handle(LogRecord(
-          level: LogLevel.INFO,
-          message: 'initial $index',
-          loggerName: 'test',
-          time: DateTime.now(),
-        ));
+        handler.handle(
+          LogRecord(
+            level: LogLevel.INFO,
+            message: 'initial $index',
+            loggerName: 'test',
+            time: DateTime.now(),
+          ),
+        );
       }
 
       await tester.pumpWidget(buildApp());
       await tester.pumpAndSettle();
 
-      final position =
-          tester.state<ScrollableState>(find.byType(Scrollable)).position;
+      final position = tester
+          .state<ScrollableState>(find.byType(Scrollable))
+          .position;
 
       expect(position.pixels, 0.0);
       expect(find.text('initial 29'), findsOneWidget);
     });
 
-    testWidgets('incoming logs do not move the current viewport by default',
-        (tester) async {
+    testWidgets('incoming logs do not move the current viewport by default', (
+      tester,
+    ) async {
       for (var index = 0; index < 30; index++) {
-        handler.handle(LogRecord(
-          level: LogLevel.INFO,
-          message: 'log $index',
-          loggerName: 'test',
-          time: DateTime.now(),
-        ));
+        handler.handle(
+          LogRecord(
+            level: LogLevel.INFO,
+            message: 'log $index',
+            loggerName: 'test',
+            time: DateTime.now(),
+          ),
+        );
       }
 
       await tester.pumpWidget(buildApp());
@@ -119,12 +133,14 @@ void main() {
 
       final beforeDy = tester.getTopLeft(find.text('log 29')).dy;
 
-      handler.handle(LogRecord(
-        level: LogLevel.INFO,
-        message: 'log 30',
-        loggerName: 'test',
-        time: DateTime.now(),
-      ));
+      handler.handle(
+        LogRecord(
+          level: LogLevel.INFO,
+          message: 'log 30',
+          loggerName: 'test',
+          time: DateTime.now(),
+        ),
+      );
 
       await tester.pumpAndSettle();
 
@@ -134,12 +150,14 @@ void main() {
     });
 
     testWidgets('clear button removes all logs', (tester) async {
-      handler.handle(LogRecord(
-        level: LogLevel.INFO,
-        message: 'to be cleared',
-        loggerName: 'test',
-        time: DateTime.now(),
-      ));
+      handler.handle(
+        LogRecord(
+          level: LogLevel.INFO,
+          message: 'to be cleared',
+          loggerName: 'test',
+          time: DateTime.now(),
+        ),
+      );
 
       await tester.pumpWidget(buildApp());
       await tester.pump();
@@ -152,12 +170,11 @@ void main() {
     });
 
     testWidgets('filter panel toggles on/off', (tester) async {
-      await tester.pumpWidget(MaterialApp(
-        home: ComonLoggerScreen(
-          handler: handler,
-          showFilterButton: true,
+      await tester.pumpWidget(
+        MaterialApp(
+          home: ComonLoggerScreen(handler: handler, showFilterButton: true),
         ),
-      ));
+      );
 
       // Filters should be hidden initially
       expect(find.text('Level'), findsNothing);
@@ -183,16 +200,18 @@ void main() {
     });
 
     testWidgets('tapping log entry expands it', (tester) async {
-      handler.handle(LogRecord(
-        level: LogLevel.SEVERE,
-        message: 'Error occurred',
-        loggerName: 'test',
-        time: DateTime.now(),
-        error: Exception('test error'),
-        layer: LogLayer.data,
-        type: LogType.network,
-        feature: 'catalog',
-      ));
+      handler.handle(
+        LogRecord(
+          level: LogLevel.SEVERE,
+          message: 'Error occurred',
+          loggerName: 'test',
+          time: DateTime.now(),
+          error: Exception('test error'),
+          layer: LogLayer.data,
+          type: LogType.network,
+          feature: 'catalog',
+        ),
+      );
 
       await tester.pumpWidget(buildApp());
       await tester.pump();

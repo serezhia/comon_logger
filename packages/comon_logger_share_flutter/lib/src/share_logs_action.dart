@@ -44,10 +44,12 @@ class ShareLogsAction extends LogScreenAction {
               subtitle: const Text('Human-readable, formatted output'),
               onTap: () {
                 Navigator.pop(ctx);
-                SharePlus.instance.share(ShareParams(
-                  text: handler.export(),
-                  subject: 'Logs from comon_logger',
-                ));
+                SharePlus.instance.share(
+                  ShareParams(
+                    text: handler.export(),
+                    subject: 'Logs from comon_logger',
+                  ),
+                );
               },
             ),
             ListTile(

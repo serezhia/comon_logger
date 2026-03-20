@@ -104,8 +104,9 @@ class _LogEntryCardState extends State<LogEntryCard> {
                           Text(
                             message,
                             maxLines: wrapMessage ? null : 1,
-                            overflow:
-                                wrapMessage ? null : TextOverflow.ellipsis,
+                            overflow: wrapMessage
+                                ? null
+                                : TextOverflow.ellipsis,
                             style: Theme.of(context).textTheme.bodyMedium,
                           ),
                         ],
@@ -147,11 +148,9 @@ class _LogEntryCardState extends State<LogEntryCard> {
           time,
           style: TextStyle(
             fontSize: 11,
-            color: Theme.of(context)
-                .textTheme
-                .bodySmall
-                ?.color
-                ?.withValues(alpha: 0.7),
+            color: Theme.of(
+              context,
+            ).textTheme.bodySmall?.color?.withValues(alpha: 0.7),
             fontFeatures: const [FontFeature.tabularFigures()],
           ),
         ),
@@ -190,58 +189,65 @@ class _LogEntryCardState extends State<LogEntryCard> {
     ];
     if (tags.isNotEmpty) {
       widgets.add(const SizedBox(height: 8));
-      widgets.add(Wrap(
-        spacing: 6,
-        runSpacing: 4,
-        children: tags
-            .map((tag) => Chip(
+      widgets.add(
+        Wrap(
+          spacing: 6,
+          runSpacing: 4,
+          children: tags
+              .map(
+                (tag) => Chip(
                   label: Text(tag, style: const TextStyle(fontSize: 11)),
                   padding: EdgeInsets.zero,
                   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   visualDensity: VisualDensity.compact,
-                ))
-            .toList(),
-      ));
+                ),
+              )
+              .toList(),
+        ),
+      );
     }
 
     // Error
     if (record.error != null) {
       widgets.add(const SizedBox(height: 8));
-      widgets.add(Container(
-        padding: const EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          color: Colors.red.withValues(alpha: 0.08),
-          borderRadius: BorderRadius.circular(4),
-        ),
-        child: SelectableText(
-          'Error: ${record.error}',
-          style: const TextStyle(
-            fontSize: 12,
-            color: Colors.red,
-            fontFamily: 'monospace',
+      widgets.add(
+        Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: Colors.red.withValues(alpha: 0.08),
+            borderRadius: BorderRadius.circular(4),
+          ),
+          child: SelectableText(
+            'Error: ${record.error}',
+            style: const TextStyle(
+              fontSize: 12,
+              color: Colors.red,
+              fontFamily: 'monospace',
+            ),
           ),
         ),
-      ));
+      );
     }
 
     // Stack trace
     if (record.stackTrace != null) {
       widgets.add(const SizedBox(height: 4));
-      widgets.add(Container(
-        padding: const EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          color: Theme.of(context)
-              .colorScheme
-              .surfaceContainerHighest
-              .withValues(alpha: 0.5),
-          borderRadius: BorderRadius.circular(4),
+      widgets.add(
+        Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: Theme.of(
+              context,
+            ).colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
+            borderRadius: BorderRadius.circular(4),
+          ),
+          child: SelectableText(
+            record.stackTrace.toString(),
+            style: const TextStyle(fontSize: 10, fontFamily: 'monospace'),
+            maxLines: 10,
+          ),
         ),
-        child: SelectableText(
-          record.stackTrace.toString(),
-          style: const TextStyle(fontSize: 10, fontFamily: 'monospace'),
-          maxLines: 10,
-        ),
-      ));
+      );
     }
 
     // Custom renderer detail (if any)
@@ -251,20 +257,21 @@ class _LogEntryCardState extends State<LogEntryCard> {
     } else if (record.extra != null && record.extra!.isNotEmpty) {
       // Generic extra fallback
       widgets.add(const SizedBox(height: 4));
-      widgets.add(Container(
-        padding: const EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          color: Theme.of(context)
-              .colorScheme
-              .surfaceContainerHighest
-              .withValues(alpha: 0.5),
-          borderRadius: BorderRadius.circular(4),
+      widgets.add(
+        Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: Theme.of(
+              context,
+            ).colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
+            borderRadius: BorderRadius.circular(4),
+          ),
+          child: SelectableText(
+            record.extra.toString(),
+            style: const TextStyle(fontSize: 11, fontFamily: 'monospace'),
+          ),
         ),
-        child: SelectableText(
-          record.extra.toString(),
-          style: const TextStyle(fontSize: 11, fontFamily: 'monospace'),
-        ),
-      ));
+      );
     }
 
     return widgets;

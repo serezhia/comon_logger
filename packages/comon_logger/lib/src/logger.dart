@@ -132,14 +132,16 @@ class Logger {
     LogType? type,
     String? feature,
     Map<String, dynamic>? extra,
-  }) =>
-      log(LogLevel.FINEST, message,
-          error: error,
-          stackTrace: stackTrace,
-          layer: layer,
-          type: type,
-          feature: feature,
-          extra: extra);
+  }) => log(
+    LogLevel.FINEST,
+    message,
+    error: error,
+    stackTrace: stackTrace,
+    layer: layer,
+    type: type,
+    feature: feature,
+    extra: extra,
+  );
 
   void finer(
     String message, {
@@ -149,14 +151,16 @@ class Logger {
     LogType? type,
     String? feature,
     Map<String, dynamic>? extra,
-  }) =>
-      log(LogLevel.FINER, message,
-          error: error,
-          stackTrace: stackTrace,
-          layer: layer,
-          type: type,
-          feature: feature,
-          extra: extra);
+  }) => log(
+    LogLevel.FINER,
+    message,
+    error: error,
+    stackTrace: stackTrace,
+    layer: layer,
+    type: type,
+    feature: feature,
+    extra: extra,
+  );
 
   void fine(
     String message, {
@@ -166,14 +170,16 @@ class Logger {
     LogType? type,
     String? feature,
     Map<String, dynamic>? extra,
-  }) =>
-      log(LogLevel.FINE, message,
-          error: error,
-          stackTrace: stackTrace,
-          layer: layer,
-          type: type,
-          feature: feature,
-          extra: extra);
+  }) => log(
+    LogLevel.FINE,
+    message,
+    error: error,
+    stackTrace: stackTrace,
+    layer: layer,
+    type: type,
+    feature: feature,
+    extra: extra,
+  );
 
   void config(
     String message, {
@@ -183,14 +189,16 @@ class Logger {
     LogType? type,
     String? feature,
     Map<String, dynamic>? extra,
-  }) =>
-      log(LogLevel.CONFIG, message,
-          error: error,
-          stackTrace: stackTrace,
-          layer: layer,
-          type: type,
-          feature: feature,
-          extra: extra);
+  }) => log(
+    LogLevel.CONFIG,
+    message,
+    error: error,
+    stackTrace: stackTrace,
+    layer: layer,
+    type: type,
+    feature: feature,
+    extra: extra,
+  );
 
   void info(
     String message, {
@@ -200,14 +208,16 @@ class Logger {
     LogType? type,
     String? feature,
     Map<String, dynamic>? extra,
-  }) =>
-      log(LogLevel.INFO, message,
-          error: error,
-          stackTrace: stackTrace,
-          layer: layer,
-          type: type,
-          feature: feature,
-          extra: extra);
+  }) => log(
+    LogLevel.INFO,
+    message,
+    error: error,
+    stackTrace: stackTrace,
+    layer: layer,
+    type: type,
+    feature: feature,
+    extra: extra,
+  );
 
   void warning(
     String message, {
@@ -217,14 +227,16 @@ class Logger {
     LogType? type,
     String? feature,
     Map<String, dynamic>? extra,
-  }) =>
-      log(LogLevel.WARNING, message,
-          error: error,
-          stackTrace: stackTrace,
-          layer: layer,
-          type: type,
-          feature: feature,
-          extra: extra);
+  }) => log(
+    LogLevel.WARNING,
+    message,
+    error: error,
+    stackTrace: stackTrace,
+    layer: layer,
+    type: type,
+    feature: feature,
+    extra: extra,
+  );
 
   void severe(
     String message, {
@@ -234,14 +246,16 @@ class Logger {
     LogType? type,
     String? feature,
     Map<String, dynamic>? extra,
-  }) =>
-      log(LogLevel.SEVERE, message,
-          error: error,
-          stackTrace: stackTrace,
-          layer: layer,
-          type: type,
-          feature: feature,
-          extra: extra);
+  }) => log(
+    LogLevel.SEVERE,
+    message,
+    error: error,
+    stackTrace: stackTrace,
+    layer: layer,
+    type: type,
+    feature: feature,
+    extra: extra,
+  );
 
   void shout(
     String message, {
@@ -251,14 +265,16 @@ class Logger {
     LogType? type,
     String? feature,
     Map<String, dynamic>? extra,
-  }) =>
-      log(LogLevel.SHOUT, message,
-          error: error,
-          stackTrace: stackTrace,
-          layer: layer,
-          type: type,
-          feature: feature,
-          extra: extra);
+  }) => log(
+    LogLevel.SHOUT,
+    message,
+    error: error,
+    stackTrace: stackTrace,
+    layer: layer,
+    type: type,
+    feature: feature,
+    extra: extra,
+  );
 
   // ── Object overrides ──────────────────────────────────
 

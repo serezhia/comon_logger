@@ -88,8 +88,9 @@ class FileLogHandler extends LogHandler {
   void handle(LogRecord record) {
     if (!_initialized || _raf == null) return;
 
-    final line =
-        writeAsJson ? jsonEncode(record.toJson()) : _formatter.format(record);
+    final line = writeAsJson
+        ? jsonEncode(record.toJson())
+        : _formatter.format(record);
 
     _writeLine(line);
   }
@@ -154,7 +155,6 @@ class FileLogHandler extends LogHandler {
     return dir.listSync().whereType<File>().where((f) {
       final name = f.uri.pathSegments.last;
       return name.startsWith(prefix) && name.endsWith(extension);
-    }).toList()
-      ..sort((a, b) => a.path.compareTo(b.path));
+    }).toList()..sort((a, b) => a.path.compareTo(b.path));
   }
 }

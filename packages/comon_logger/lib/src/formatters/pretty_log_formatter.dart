@@ -14,8 +14,10 @@ import '../log_record.dart';
 /// └─────────────────────────────────────────────────
 /// ```
 class PrettyLogFormatter extends LogFormatter {
-  const PrettyLogFormatter(
-      {this.useColors = true, this.maxStackTraceLines = 8});
+  const PrettyLogFormatter({
+    this.useColors = true,
+    this.maxStackTraceLines = 8,
+  });
 
   /// Whether to use ANSI escape codes for color output.
   final bool useColors;
@@ -66,22 +68,27 @@ class PrettyLogFormatter extends LogFormatter {
     // Error
     if (record.error != null) {
       buf.writeln(
-          _wrap(color, '${_line}Error: ${record.error.toString()}$reset'));
+        _wrap(color, '${_line}Error: ${record.error.toString()}$reset'),
+      );
     }
 
     // Stack trace
     if (record.stackTrace != null) {
       final lines = record.stackTrace.toString().split('\n');
-      final limit =
-          lines.length > maxStackTraceLines ? maxStackTraceLines : lines.length;
+      final limit = lines.length > maxStackTraceLines
+          ? maxStackTraceLines
+          : lines.length;
       for (var i = 0; i < limit; i++) {
         buf.writeln(_wrap(color, '$_line${lines[i]}$reset'));
       }
       if (lines.length > maxStackTraceLines) {
-        buf.writeln(_wrap(
+        buf.writeln(
+          _wrap(
             color,
             '$_line... ${lines.length - maxStackTraceLines} more lines'
-            '$reset'));
+            '$reset',
+          ),
+        );
       }
     }
 

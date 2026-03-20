@@ -50,8 +50,9 @@ mixin Log {
     String? feature,
     Map<String, dynamic>? extra,
   }) {
-    final mergedExtra =
-        logExtra == null && extra == null ? null : {...?logExtra, ...?extra};
+    final mergedExtra = logExtra == null && extra == null
+        ? null
+        : {...?logExtra, ...?extra};
 
     logger.log(
       level,
@@ -74,17 +75,16 @@ mixin Log {
     LogType? type,
     String? feature,
     Map<String, dynamic>? extra,
-  }) =>
-      _log(
-        LogLevel.FINEST,
-        message,
-        error: error,
-        stackTrace: stackTrace,
-        layer: layer,
-        type: type,
-        feature: feature,
-        extra: extra,
-      );
+  }) => _log(
+    LogLevel.FINEST,
+    message,
+    error: error,
+    stackTrace: stackTrace,
+    layer: layer,
+    type: type,
+    feature: feature,
+    extra: extra,
+  );
 
   /// Logs a message at [LogLevel.FINER].
   void finer(
@@ -95,17 +95,16 @@ mixin Log {
     LogType? type,
     String? feature,
     Map<String, dynamic>? extra,
-  }) =>
-      _log(
-        LogLevel.FINER,
-        message,
-        error: error,
-        stackTrace: stackTrace,
-        layer: layer,
-        type: type,
-        feature: feature,
-        extra: extra,
-      );
+  }) => _log(
+    LogLevel.FINER,
+    message,
+    error: error,
+    stackTrace: stackTrace,
+    layer: layer,
+    type: type,
+    feature: feature,
+    extra: extra,
+  );
 
   /// Logs a message at [LogLevel.FINE].
   void fine(
@@ -116,17 +115,16 @@ mixin Log {
     LogType? type,
     String? feature,
     Map<String, dynamic>? extra,
-  }) =>
-      _log(
-        LogLevel.FINE,
-        message,
-        error: error,
-        stackTrace: stackTrace,
-        layer: layer,
-        type: type,
-        feature: feature,
-        extra: extra,
-      );
+  }) => _log(
+    LogLevel.FINE,
+    message,
+    error: error,
+    stackTrace: stackTrace,
+    layer: layer,
+    type: type,
+    feature: feature,
+    extra: extra,
+  );
 
   /// Logs a message at [LogLevel.CONFIG].
   void config(
@@ -137,17 +135,16 @@ mixin Log {
     LogType? type,
     String? feature,
     Map<String, dynamic>? extra,
-  }) =>
-      _log(
-        LogLevel.CONFIG,
-        message,
-        error: error,
-        stackTrace: stackTrace,
-        layer: layer,
-        type: type,
-        feature: feature,
-        extra: extra,
-      );
+  }) => _log(
+    LogLevel.CONFIG,
+    message,
+    error: error,
+    stackTrace: stackTrace,
+    layer: layer,
+    type: type,
+    feature: feature,
+    extra: extra,
+  );
 
   /// Logs a message at [LogLevel.INFO].
   void info(
@@ -158,17 +155,16 @@ mixin Log {
     LogType? type,
     String? feature,
     Map<String, dynamic>? extra,
-  }) =>
-      _log(
-        LogLevel.INFO,
-        message,
-        error: error,
-        stackTrace: stackTrace,
-        layer: layer,
-        type: type,
-        feature: feature,
-        extra: extra,
-      );
+  }) => _log(
+    LogLevel.INFO,
+    message,
+    error: error,
+    stackTrace: stackTrace,
+    layer: layer,
+    type: type,
+    feature: feature,
+    extra: extra,
+  );
 
   /// Logs a message at [LogLevel.WARNING].
   void warning(
@@ -179,17 +175,16 @@ mixin Log {
     LogType? type,
     String? feature,
     Map<String, dynamic>? extra,
-  }) =>
-      _log(
-        LogLevel.WARNING,
-        message,
-        error: error,
-        stackTrace: stackTrace,
-        layer: layer,
-        type: type,
-        feature: feature,
-        extra: extra,
-      );
+  }) => _log(
+    LogLevel.WARNING,
+    message,
+    error: error,
+    stackTrace: stackTrace,
+    layer: layer,
+    type: type,
+    feature: feature,
+    extra: extra,
+  );
 
   /// Logs a message at [LogLevel.SEVERE].
   void severe(
@@ -200,17 +195,16 @@ mixin Log {
     LogType? type,
     String? feature,
     Map<String, dynamic>? extra,
-  }) =>
-      _log(
-        LogLevel.SEVERE,
-        message,
-        error: error,
-        stackTrace: stackTrace,
-        layer: layer,
-        type: type,
-        feature: feature,
-        extra: extra,
-      );
+  }) => _log(
+    LogLevel.SEVERE,
+    message,
+    error: error,
+    stackTrace: stackTrace,
+    layer: layer,
+    type: type,
+    feature: feature,
+    extra: extra,
+  );
 
   /// Logs a message at [LogLevel.SHOUT].
   void shout(
@@ -221,15 +215,14 @@ mixin Log {
     LogType? type,
     String? feature,
     Map<String, dynamic>? extra,
-  }) =>
-      _log(
-        LogLevel.SHOUT,
-        message,
-        error: error,
-        stackTrace: stackTrace,
-        layer: layer,
-        type: type,
-        feature: feature,
-        extra: extra,
-      );
+  }) => _log(
+    LogLevel.SHOUT,
+    message,
+    error: error,
+    stackTrace: stackTrace,
+    layer: layer,
+    type: type,
+    feature: feature,
+    extra: extra,
+  );
 }

@@ -102,22 +102,22 @@ class _ComonLoggerDevToolsPanelState extends State<ComonLoggerDevToolsPanel> {
       }
       if (_featureFilter.isNotEmpty &&
           (r.feature == null ||
-              !r.feature!
-                  .toLowerCase()
-                  .contains(_featureFilter.toLowerCase()))) {
+              !r.feature!.toLowerCase().contains(
+                _featureFilter.toLowerCase(),
+              ))) {
         return false;
       }
       if (_loggerNameFilter.isNotEmpty &&
-          !r.loggerName
-              .toLowerCase()
-              .contains(_loggerNameFilter.toLowerCase())) {
+          !r.loggerName.toLowerCase().contains(
+            _loggerNameFilter.toLowerCase(),
+          )) {
         return false;
       }
       if (_searchText.isNotEmpty &&
           !r.message.toLowerCase().contains(_searchText.toLowerCase()) &&
           !(r.error?.toString().toLowerCase().contains(
-                    _searchText.toLowerCase(),
-                  ) ??
+                _searchText.toLowerCase(),
+              ) ??
               false)) {
         return false;
       }
@@ -207,10 +207,7 @@ class _ComonLoggerDevToolsPanelState extends State<ComonLoggerDevToolsPanel> {
                   controller: controller,
                   maxLines: null,
                   expands: true,
-                  style: const TextStyle(
-                    fontFamily: 'monospace',
-                    fontSize: 12,
-                  ),
+                  style: const TextStyle(fontFamily: 'monospace', fontSize: 12),
                   decoration: const InputDecoration(
                     hintText: '[{"level":"INFO","message":"...", ...}]',
                     border: OutlineInputBorder(),
@@ -357,8 +354,10 @@ class _ComonLoggerDevToolsPanelState extends State<ComonLoggerDevToolsPanel> {
           Wrap(
             spacing: 4,
             children: [
-              const Text('Level: ',
-                  style: TextStyle(fontWeight: FontWeight.bold)),
+              const Text(
+                'Level: ',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
               for (final level in [
                 LogLevel.FINEST,
                 LogLevel.FINER,
@@ -389,8 +388,10 @@ class _ComonLoggerDevToolsPanelState extends State<ComonLoggerDevToolsPanel> {
           Wrap(
             spacing: 4,
             children: [
-              const Text('Layer: ',
-                  style: TextStyle(fontWeight: FontWeight.bold)),
+              const Text(
+                'Layer: ',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
               for (final layer in [
                 LogLayer.data,
                 LogLayer.domain,
@@ -418,8 +419,10 @@ class _ComonLoggerDevToolsPanelState extends State<ComonLoggerDevToolsPanel> {
           Wrap(
             spacing: 4,
             children: [
-              const Text('Type: ',
-                  style: TextStyle(fontWeight: FontWeight.bold)),
+              const Text(
+                'Type: ',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
               for (final type in [
                 LogType.network,
                 LogType.database,
@@ -543,10 +546,7 @@ class _ComonLoggerDevToolsPanelState extends State<ComonLoggerDevToolsPanel> {
   Widget _buildLogList() {
     if (_filteredRecords.isEmpty) {
       return const Center(
-        child: Text(
-          'No log records',
-          style: TextStyle(color: Colors.grey),
-        ),
+        child: Text('No log records', style: TextStyle(color: Colors.grey)),
       );
     }
 
@@ -556,7 +556,8 @@ class _ComonLoggerDevToolsPanelState extends State<ComonLoggerDevToolsPanel> {
       itemBuilder: (context, index) {
         final record = _filteredRecords[index];
         final isExpanded = _expandedIndex == index;
-        final time = '${record.time.hour.toString().padLeft(2, '0')}:'
+        final time =
+            '${record.time.hour.toString().padLeft(2, '0')}:'
             '${record.time.minute.toString().padLeft(2, '0')}:'
             '${record.time.second.toString().padLeft(2, '0')}.'
             '${record.time.millisecond.toString().padLeft(3, '0')}';
@@ -570,10 +571,7 @@ class _ComonLoggerDevToolsPanelState extends State<ComonLoggerDevToolsPanel> {
           child: Container(
             decoration: BoxDecoration(
               border: Border(
-                left: BorderSide(
-                  color: _levelColor(record.level),
-                  width: 3,
-                ),
+                left: BorderSide(color: _levelColor(record.level), width: 3),
                 bottom: BorderSide(
                   color: Theme.of(context).dividerColor.withValues(alpha: 0.2),
                 ),
@@ -603,8 +601,9 @@ class _ComonLoggerDevToolsPanelState extends State<ComonLoggerDevToolsPanel> {
                         vertical: 1,
                       ),
                       decoration: BoxDecoration(
-                        color:
-                            _levelColor(record.level).withValues(alpha: 0.15),
+                        color: _levelColor(
+                          record.level,
+                        ).withValues(alpha: 0.15),
                         borderRadius: BorderRadius.circular(3),
                       ),
                       child: Text(
@@ -645,10 +644,7 @@ class _ComonLoggerDevToolsPanelState extends State<ComonLoggerDevToolsPanel> {
                 // Expanded details
                 if (isExpanded) ...[
                   const Divider(height: 8),
-                  Text(
-                    record.message,
-                    style: const TextStyle(fontSize: 12),
-                  ),
+                  Text(record.message, style: const TextStyle(fontSize: 12)),
                   if (record.error != null) ...[
                     const SizedBox(height: 4),
                     Text(
@@ -702,10 +698,7 @@ class _ComonLoggerDevToolsPanelState extends State<ComonLoggerDevToolsPanel> {
           color: color.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(3),
         ),
-        child: Text(
-          label,
-          style: TextStyle(fontSize: 9, color: color),
-        ),
+        child: Text(label, style: TextStyle(fontSize: 9, color: color)),
       ),
     );
   }

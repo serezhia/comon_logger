@@ -41,11 +41,13 @@ void main() {
     });
 
     test('includes tags when present', () {
-      final output = formatter.format(makeRecord(
-        layer: LogLayer.data,
-        type: LogType.network,
-        feature: 'catalog',
-      ));
+      final output = formatter.format(
+        makeRecord(
+          layer: LogLayer.data,
+          type: LogType.network,
+          feature: 'catalog',
+        ),
+      );
       expect(output, contains('{data|network|catalog}'));
     });
 
@@ -55,9 +57,7 @@ void main() {
     });
 
     test('includes error when present', () {
-      final output = formatter.format(makeRecord(
-        error: Exception('boom'),
-      ));
+      final output = formatter.format(makeRecord(error: Exception('boom')));
       expect(output, contains('Error:'));
       expect(output, contains('boom'));
     });
@@ -96,20 +96,22 @@ void main() {
     });
 
     test('includes tags in header', () {
-      final output = formatter.format(makeRecord(
-        layer: LogLayer.data,
-        type: LogType.network,
-        feature: 'catalog',
-      ));
+      final output = formatter.format(
+        makeRecord(
+          layer: LogLayer.data,
+          type: LogType.network,
+          feature: 'catalog',
+        ),
+      );
       expect(output, contains('data'));
       expect(output, contains('network'));
       expect(output, contains('catalog'));
     });
 
     test('includes error', () {
-      final output = formatter.format(makeRecord(
-        error: Exception('test error'),
-      ));
+      final output = formatter.format(
+        makeRecord(error: Exception('test error')),
+      );
       expect(output, contains('Error:'));
       expect(output, contains('test error'));
     });
@@ -122,18 +124,18 @@ void main() {
     });
 
     test('includes extra as JSON', () {
-      final output = formatter.format(makeRecord(
-        extra: {'key': 'value', 'count': 42},
-      ));
+      final output = formatter.format(
+        makeRecord(extra: {'key': 'value', 'count': 42}),
+      );
       expect(output, contains('"key"'));
       expect(output, contains('"value"'));
       expect(output, contains('42'));
     });
 
     test('handles multi-line messages', () {
-      final output = formatter.format(makeRecord(
-        message: 'Line 1\nLine 2\nLine 3',
-      ));
+      final output = formatter.format(
+        makeRecord(message: 'Line 1\nLine 2\nLine 3'),
+      );
       expect(output, contains('Line 1'));
       expect(output, contains('Line 2'));
       expect(output, contains('Line 3'));

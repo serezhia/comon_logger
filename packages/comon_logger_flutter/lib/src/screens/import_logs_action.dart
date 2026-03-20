@@ -73,10 +73,7 @@ class ImportLogsAction extends LogScreenAction {
                   controller: controller,
                   maxLines: null,
                   expands: true,
-                  style: const TextStyle(
-                    fontFamily: 'monospace',
-                    fontSize: 12,
-                  ),
+                  style: const TextStyle(fontFamily: 'monospace', fontSize: 12),
                   decoration: const InputDecoration(
                     hintText: '[{"level":"INFO",...}, ...]',
                     border: OutlineInputBorder(),
@@ -123,9 +120,9 @@ class ImportLogsAction extends LogScreenAction {
       }
 
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Imported $count log records')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Imported $count log records')));
       }
     } catch (e) {
       if (context.mounted) {
