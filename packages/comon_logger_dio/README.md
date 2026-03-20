@@ -5,11 +5,19 @@ Dio integration package for `comon_logger` with two pieces:
 - `ComonDioInterceptor` for structured request, response, and error logs
 - `HttpConsoleLogFormatter` for rich HTTP rendering in the console
 
+## Installation
+
+```bash
+dart pub add dio
+dart pub add comon_logger_dio
+```
+
 ## Quick Start
 
 ```dart
 import 'package:comon_logger/comon_logger.dart';
 import 'package:comon_logger_dio/comon_logger_dio.dart';
+import 'package:dio/dio.dart';
 
 Logger.root.addHandler(ConsoleLogHandler(
   formatters: const [
@@ -25,7 +33,7 @@ dio.interceptors.add(ComonDioInterceptor(
 ));
 ```
 
-## What It Adds
+## Included components
 
 | Component | Purpose |
 |-----------|---------|
@@ -46,7 +54,7 @@ dio.interceptors.add(ComonDioInterceptor(
 | `errorFilter` | `null` | Skip error logging when it returns `false` |
 | `loggerName` | `comon.dio` | Logger name used for emitted records |
 
-## Console Formatter Options
+## Formatter options
 
 `HttpConsoleLogFormatter` can render:
 
@@ -73,3 +81,10 @@ ConsoleLogHandler(
   formatter: PrettyLogFormatter(),
 )
 ```
+
+## Related packages
+
+| Package | Adds |
+|---------|------|
+| `comon_logger` | Core logger, levels, handlers, and base formatters |
+| `comon_logger_dio_flutter` | Rich Flutter rendering for the structured HTTP records |

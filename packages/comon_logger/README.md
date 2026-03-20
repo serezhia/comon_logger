@@ -3,14 +3,20 @@
 Zero-dependency logging core for Dart with hierarchical loggers, typed tags,
 filters, handlers, and extensible formatter add-ons.
 
-## Highlights
+## Features
 
 - Hierarchical `Logger` instances with propagation to `Logger.root`
 - Structured tags with `LogLevel`, `LogLayer`, `LogType`, and `feature`
 - Per-handler filtering via `LogFilter`
 - Console, file, and custom handler support
-- Simple and pretty formatters out of the box
+- `PrettyLogFormatter` and `SimpleLogFormatter` out of the box
 - Formatter add-ons via `ConsoleLogHandler(formatters: [...])`
+
+## Installation
+
+```bash
+dart pub add comon_logger
+```
 
 ## Quick Start
 
@@ -19,7 +25,7 @@ import 'package:comon_logger/comon_logger.dart';
 
 void main() {
   Logger.root.addHandler(ConsoleLogHandler(
-    filter: LevelLogFilter(LogLevel.FINE),
+    filter: const LevelLogFilter(LogLevel.INFO),
   ));
 
   final log = Logger('my_app.catalog');
@@ -42,23 +48,7 @@ void main() {
 }
 ```
 
-## Console Formatter Add-ons
-
-`ConsoleLogHandler` can try specialized formatters first and fall back to a
-default formatter for all other records.
-
-```dart
-Logger.root.addHandler(ConsoleLogHandler(
-  formatters: const [
-    MySpecialFormatter(),
-  ],
-  formatter: PrettyLogFormatter(),
-));
-```
-
-The first formatter whose `canFormat(record)` returns `true` wins.
-
-## Core Concepts
+## Configuration
 
 ### Logger hierarchy
 
@@ -86,14 +76,30 @@ const filter = CompositeLogFilter([
 ], mode: CompositeMode.and);
 ```
 
-### Formatters
+### Formatter add-ons
+
+`ConsoleLogHandler` can try specialized formatters first and fall back to a
+default formatter for all other records.
+
+```dart
+Logger.root.addHandler(ConsoleLogHandler(
+  formatters: const [
+    MySpecialFormatter(),
+  ],
+  formatter: PrettyLogFormatter(),
+));
+```
+
+The first formatter whose `canFormat(record)` returns `true` wins.
+
+## Included formatters
 
 | Formatter | Purpose |
 |-----------|---------|
 | `PrettyLogFormatter` | Multi-line console output with ANSI colors and emoji |
 | `SimpleLogFormatter` | Compact single-line text format |
 
-## Ecosystem Packages
+## Related packages
 
 | Package | Adds |
 |---------|------|

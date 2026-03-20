@@ -1,6 +1,6 @@
 name: comon_logger
 description: A modular, extensible logging library for Dart. Core package with zero dependencies.
-version: 0.1.1
+version: 0.1.2
 resolution: workspace
 homepage: https://github.com/serezhia/comon_logger
 repository: https://github.com/serezhia/comon_logger/tree/main/packages/comon_logger

@@ -1,6 +1,6 @@
 name: comon_logger_flutter
 description: Flutter UI for comon_logger — log viewer screen with filters.
-version: 0.1.1
+version: 0.1.2
 resolution: workspace
 homepage: https://github.com/serezhia/comon_logger
 repository: https://github.com/serezhia/comon_logger/tree/main/packages/comon_logger_flutter
@@ -18,7 +18,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  comon_logger: ^0.1.1
+  comon_logger: ^0.1.2
 
 dev_dependencies:
   flutter_test:

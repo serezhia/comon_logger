@@ -1,6 +1,6 @@
 name: comon_logger_dio
 description: Dio HTTP interceptor for comon_logger.
-version: 0.1.1
+version: 0.1.2
 resolution: workspace
 homepage: https://github.com/serezhia/comon_logger
 repository: https://github.com/serezhia/comon_logger/tree/main/packages/comon_logger_dio
@@ -15,7 +15,7 @@ environment:
   sdk: ^3.9.0
 
 dependencies:
-  comon_logger: ^0.1.1
+  comon_logger: ^0.1.2
   dio: ^5.0.0
 
 dev_dependencies:

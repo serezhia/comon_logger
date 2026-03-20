@@ -2,7 +2,7 @@
 
 DevTools panel for `comon_logger` connected Flutter apps.
 
-## What It Does
+## Features
 
 When an app registers `ComonLoggerServiceExtension`, this extension:
 
@@ -19,6 +19,25 @@ When an app registers `ComonLoggerServiceExtension`, this extension:
 - expandable rows with error and extra data
 - clear logs locally and remotely
 
+## Installation
+
+This package is an internal DevTools extension package and is not published to
+pub.dev. It is consumed from this monorepo workspace.
+
+## App integration
+
+Register the service extension in your Flutter app:
+
+```dart
+import 'package:comon_logger_flutter/comon_logger_flutter.dart';
+
+final historyHandler = HistoryLogHandler();
+
+void registerDevToolsBridge() {
+	ComonLoggerServiceExtension(historyHandler).register();
+}
+```
+
 ## Build
 
 ```bash
@@ -30,3 +49,10 @@ flutter build web --release --output=extension/devtools/build
 
 - the app must register `ComonLoggerServiceExtension(historyHandler).register()`
 - `comon_logger_flutter` must be present in the target app
+
+## Related packages
+
+| Package | Adds |
+|---------|------|
+| `comon_logger` | Core record model consumed by the extension |
+| `comon_logger_flutter` | Service extension bridge and in-app history source |

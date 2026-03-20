@@ -1,6 +1,6 @@
 name: comon_logger_share_flutter
 description: Share/export action for comon_logger log viewer screen.
-version: 0.1.1
+version: 0.1.2
 resolution: workspace
 homepage: https://github.com/serezhia/comon_logger
 repository: https://github.com/serezhia/comon_logger/tree/main/packages/comon_logger_share_flutter
@@ -17,8 +17,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  comon_logger: ^0.1.1
-  comon_logger_flutter: ^0.1.1
+  comon_logger: ^0.1.2
+  comon_logger_flutter: ^0.1.2
   share_plus: ^12.0.0
 
 dev_dependencies:

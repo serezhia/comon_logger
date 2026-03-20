@@ -2,6 +2,20 @@
 
 Rotating file handler for `comon_logger`.
 
+## Features
+
+- automatic rotation by file size
+- max file retention
+- plain text or JSON lines mode
+- custom formatter support
+- append-on-restart behavior
+
+## Installation
+
+```bash
+dart pub add comon_logger_file
+```
+
 ## Quick Start
 
 ```dart
@@ -17,14 +31,6 @@ final fileHandler = FileLogHandler(
 await fileHandler.init();
 Logger.root.addHandler(fileHandler);
 ```
-
-## Features
-
-- automatic rotation by file size
-- max file retention
-- plain text or JSON lines mode
-- custom formatter support
-- append-on-restart behavior
 
 ## Configuration
 
@@ -42,6 +48,12 @@ Logger.root.addHandler(fileHandler);
 
 ```dart
 await fileHandler.init();
-await fileHandler.flush();
+fileHandler.flush();
 await fileHandler.close();
 ```
+
+## Related packages
+
+| Package | Adds |
+|---------|------|
+| `comon_logger` | Core logger, filters, handlers, and console formatters |
