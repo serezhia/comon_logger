@@ -4,6 +4,7 @@
         "index",
         "getting-started",
         "core",
+        "otel",
         "flutter",
         "dio",
         "file",

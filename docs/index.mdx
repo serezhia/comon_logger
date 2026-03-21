@@ -20,6 +20,7 @@ The ecosystem is split into focused packages so you can keep the core small and 
 | Package | Use it for | When to add it |
 | --- | --- | --- |
 | `comon_logger` | Core logger, filters, handlers, formatters | Always start here |
+| `comon_logger_otel` | Export `comon_logger` records into OpenTelemetry logs with trace correlation | You already use `comon_otel` and want logs in the same observability pipeline |
 | `comon_logger_flutter` | In-app viewer and session history | You want to inspect logs inside a Flutter app |
 | `comon_logger_dio` | Dio interceptor and HTTP console formatter | You use Dio and want structured network logs |
 | `comon_logger_dio_flutter` | Rich HTTP cards in the Flutter viewer | You already log Dio requests into `HistoryLogHandler` |
@@ -42,6 +43,10 @@ Use `comon_logger` + `comon_logger_flutter`, then add HTTP, share, and navigatio
 
 Use `comon_logger` + `comon_logger_file` for console plus rotating disk output.
 
+### Unified observability
+
+Use `comon_logger` + `comon_logger_otel` when the project already emits traces or metrics through `comon_otel` and logs should go to the same backend with active trace correlation.
+
 ### Full mobile debugging stack
 
 Use:
@@ -63,6 +68,7 @@ Use:
 <Cards>
   <Card title="Getting started" href="/docs/logger/getting-started" description="Install the core package, attach a console handler, and emit the first records." />
   <Card title="Core" href="/docs/logger/core" description="Learn the record model, logger hierarchy, filters, handlers, and formatter pipeline." />
+  <Card title="OpenTelemetry" href="/docs/logger/otel" description="Bridge `comon_logger` records into `comon_otel` so logs, traces, and metrics share one pipeline." />
   <Card title="Flutter" href="/docs/logger/flutter" description="Add `HistoryLogHandler`, open the in-app viewer, and plug into DevTools." />
   <Card title="Dio" href="/docs/logger/dio" description="Capture structured HTTP logs and render them in the console or Flutter UI." />
   <Card title="File logging" href="/docs/logger/file" description="Persist logs to rotating files with retention and optional JSON lines output." />
@@ -74,5 +80,6 @@ Use:
 
 1. Start with [Getting started](/docs/logger/getting-started).
 2. Read [Core](/docs/logger/core) to understand the data model and filter pipeline.
-3. Add [Flutter](/docs/logger/flutter) or [Dio](/docs/logger/dio) depending on your app shape.
-4. Add [File logging](/docs/logger/file), [Navigation](/docs/logger/navigation), and [Sharing](/docs/logger/share) as focused extensions.
+3. Add [OpenTelemetry](/docs/logger/otel) if logs should leave the app as part of a broader observability pipeline.
+4. Add [Flutter](/docs/logger/flutter) or [Dio](/docs/logger/dio) depending on your app shape.
+5. Add [File logging](/docs/logger/file), [Navigation](/docs/logger/navigation), and [Sharing](/docs/logger/share) as focused extensions.

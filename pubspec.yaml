@@ -8,6 +8,7 @@ environment:
 
 workspace:
   - packages/comon_logger
+  - packages/comon_logger_otel
   - packages/comon_logger_flutter
   - packages/comon_logger_dio
   - packages/comon_logger_dio_flutter
@@ -26,6 +27,7 @@ melos:
   categories:
     dart-package:
       - packages/comon_logger
+      - packages/comon_logger_otel
       - packages/comon_logger_dio
       - packages/comon_logger_file
       - examples/shelf_app
