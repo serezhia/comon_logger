@@ -1,0 +1,13 @@
+{
+    "title": "Logger",
+    "pages": [
+        "index",
+        "getting-started",
+        "core",
+        "flutter",
+        "dio",
+        "file",
+        "navigation",
+        "share"
+    ]
+}

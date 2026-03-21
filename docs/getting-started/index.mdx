@@ -1,0 +1,95 @@
+---
+title: Getting started
+description: Install comon_logger, attach a console handler, and emit the first structured records.
+---
+
+# Getting started
+
+The smallest useful setup is:
+
+1. add `comon_logger`
+2. attach a handler to `Logger.root`
+3. create a named logger
+4. emit records with typed tags
+
+## Install the core package
+
+```bash
+dart pub add comon_logger
+```
+
+For Flutter projects the command is the same:
+
+```bash
+flutter pub add comon_logger
+```
+
+## Minimal console setup
+
+```dart
+import 'package:comon_logger/comon_logger.dart';
+
+void main() {
+  Logger.root.addHandler(
+    ConsoleLogHandler(
+      filter: const LevelLogFilter(LogLevel.INFO),
+      formatter: PrettyLogFormatter(),
+    ),
+  );
+
+  final log = Logger('my_app.catalog');
+
+  log.info(
+    'Products loaded',
+    layer: LogLayer.data,
+    type: LogType.network,
+    feature: 'catalog',
+  );
+}
+```
+
+## What is happening here
+
+- `Logger.root` is the top-level logger that can receive records from all children.
+- `ConsoleLogHandler` prints accepted records.
+- `LevelLogFilter(LogLevel.INFO)` blocks records below `INFO` for this handler.
+- `Logger('my_app.catalog')` creates or reuses a named child logger.
+- `layer`, `type`, and `feature` make the record filterable later.
+
+## Add an error record
+
+```dart
+log.severe(
+  'Failed to load products',
+  error: Exception('Network timeout'),
+  stackTrace: StackTrace.current,
+  layer: LogLayer.data,
+  type: LogType.network,
+  feature: 'catalog',
+);
+```
+
+## Flutter session history
+
+When you need in-app diagnostics, add `comon_logger_flutter` and store records in memory:
+
+```bash
+flutter pub add comon_logger_flutter
+```
+
+```dart
+import 'package:comon_logger_flutter/comon_logger_flutter.dart';
+
+final historyHandler = HistoryLogHandler(maxHistory: 2000);
+
+void initLogging() {
+  Logger.root.addHandler(ConsoleLogHandler());
+  Logger.root.addHandler(historyHandler);
+}
+```
+
+## Next steps
+
+- Read [Core](/docs/logger/core) for the logger hierarchy, filters, handlers, and formatters.
+- Read [Flutter](/docs/logger/flutter) if you want an in-app log screen.
+- Read [Dio](/docs/logger/dio) if you need structured HTTP logging.

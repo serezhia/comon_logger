@@ -1,0 +1,69 @@
+---
+title: Filters
+description: Filter records by level, layer, type, feature, or custom boolean combinations.
+---
+
+# Filters
+
+Filters run per handler. That means the same record can be accepted by one handler and rejected by another.
+
+## Built-in filters
+
+| Filter | Purpose |
+| --- | --- |
+| `LevelLogFilter` | Minimum severity threshold |
+| `LayerLogFilter` | Allow only selected architectural layers |
+| `TypeLogFilter` | Allow only selected log categories |
+| `FeatureLogFilter` | Allow only selected feature tags |
+| `CompositeLogFilter` | Combine multiple filters with `and` or `or` |
+| `AllPassLogFilter` | Accept everything |
+
+## Minimum level
+
+```dart
+ConsoleLogHandler(
+  filter: const LevelLogFilter(LogLevel.WARNING),
+)
+```
+
+This keeps warnings and above while dropping `INFO` and lower.
+
+## Filter by type
+
+```dart
+ConsoleLogHandler(
+  filter: const TypeLogFilter({LogType.network}),
+)
+```
+
+Useful when you want one handler dedicated to HTTP or database traffic.
+
+## Combine filters
+
+```dart
+const filter = CompositeLogFilter(
+  [
+    LevelLogFilter(LogLevel.INFO),
+    TypeLogFilter({LogType.network}),
+  ],
+  mode: CompositeMode.and,
+);
+```
+
+This accepts only network records at `INFO` or above.
+
+## Important behavior
+
+- Filtering happens before `handle(record)`.
+- Rejected records never reach the output sink.
+- Filters with nullable tags usually let missing values pass unless they are explicitly checking for membership.
+
+## Practical pattern
+
+Use different filters per sink:
+
+- console: `INFO` and above
+- file: `FINE` and above
+- viewer history: everything you care to inspect live
+
+That is usually better than trying to force one global threshold for every consumer.

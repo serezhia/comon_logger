@@ -1,0 +1,8 @@
+{
+    "title": "Share",
+    "description": "Export and share viewer logs.",
+    "root": true,
+    "pages": [
+        "index"
+    ]
+}

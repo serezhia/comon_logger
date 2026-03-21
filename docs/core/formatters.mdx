@@ -1,0 +1,70 @@
+---
+title: Formatters
+description: Format log records for console or text export with pretty, simple, or specialized formatter chains.
+---
+
+# Formatters
+
+Formatters turn a structured `LogRecord` into text.
+
+## Built-in formatters
+
+| Formatter | Purpose |
+| --- | --- |
+| `PrettyLogFormatter` | Multi-line human-friendly console output with ANSI colors |
+| `SimpleLogFormatter` | Compact single-line text |
+| `HttpConsoleLogFormatter` | HTTP-specific formatting for Dio records |
+
+## Pretty formatter
+
+```dart
+ConsoleLogHandler(
+  formatter: PrettyLogFormatter(
+    useColors: true,
+    maxStackTraceLines: 8,
+  ),
+)
+```
+
+Good default for local development.
+
+## Simple formatter
+
+```dart
+ConsoleLogHandler(
+  formatter: SimpleLogFormatter(),
+)
+```
+
+Useful when you want compact text or stable lines for parsing/export.
+
+## Formatter add-ons
+
+`ConsoleLogHandler` can try specialized formatters first:
+
+```dart
+Logger.root.addHandler(
+  ConsoleLogHandler(
+    formatters: const [
+      HttpConsoleLogFormatter(),
+    ],
+    formatter: PrettyLogFormatter(),
+  ),
+);
+```
+
+The first formatter whose `canFormat(record)` returns `true` wins.
+
+That pattern is how HTTP logs can get rich request/response formatting without changing how non-HTTP records are rendered.
+
+## Choosing a formatter
+
+- local app development: `PrettyLogFormatter`
+- compact persistent text: `SimpleLogFormatter`
+- Dio console diagnostics: `HttpConsoleLogFormatter` plus fallback formatter
+
+## Custom formatters
+
+Implement `LogFormatter` when a sink needs a custom textual representation.
+
+Prefer custom formatters over manually packing structured fields into the message string.

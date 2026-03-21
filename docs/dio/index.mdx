@@ -1,0 +1,77 @@
+---
+title: Dio
+description: Capture structured HTTP logs from Dio and render them cleanly in the console.
+---
+
+# Dio
+
+`comon_logger_dio` provides two distinct pieces:
+
+- `ComonDioInterceptor` to emit structured HTTP records
+- `HttpConsoleLogFormatter` to format those records in the console
+
+## Minimal setup
+
+```dart
+import 'package:dio/dio.dart';
+import 'package:comon_logger/comon_logger.dart';
+import 'package:comon_logger_dio/comon_logger_dio.dart';
+
+Logger.root.addHandler(
+  ConsoleLogHandler(
+    formatters: const [
+      HttpConsoleLogFormatter(),
+    ],
+    formatter: PrettyLogFormatter(),
+  ),
+);
+
+final dio = Dio();
+dio.interceptors.add(
+  ComonDioInterceptor(
+    logRequestBody: true,
+    logResponseBody: true,
+  ),
+);
+```
+
+## What gets logged
+
+- request phase
+- response phase
+- error phase
+
+Records are emitted with `LogType.network` and structured `extra` payload data.
+
+## Important distinction
+
+Options like `logRequestBody` and `logResponseBody` affect console text output, not the structured payload stored on the record.
+
+That means Flutter UI renderers can still use the rich `extra` payload even when console output is intentionally brief.
+
+## Filters
+
+```dart
+ComonDioInterceptor(
+  requestFilter: (options) => !options.path.contains('/health'),
+  responseFilter: (response) => response.requestOptions.path != '/ping',
+)
+```
+
+Return `false` to skip logging that request, response, or error.
+
+## Formatter tuning
+
+```dart
+HttpConsoleLogFormatter(
+  showFullUrl: true,
+  showQueryParams: true,
+  showErrorResponseBody: true,
+)
+```
+
+Use this when HTTP diagnostics need more detail than the default compact output.
+
+## Next step
+
+If you already store logs in `HistoryLogHandler`, add [Flutter HTTP rendering](/docs/logger/flutter) for better in-app inspection.

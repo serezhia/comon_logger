@@ -1,0 +1,10 @@
+{
+    "title": "Flutter",
+    "description": "In-app viewer and history storage.",
+    "root": true,
+    "pages": [
+        "index",
+        "log-screen",
+        "history-handler"
+    ]
+}

@@ -1,0 +1,8 @@
+{
+    "title": "Getting started",
+    "description": "Installation and the first logger.",
+    "root": true,
+    "pages": [
+        "index"
+    ]
+}

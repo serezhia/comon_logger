@@ -1,0 +1,41 @@
+---
+title: Flutter HTTP UI
+description: Render structured Dio records in ComonLoggerScreen with specialized network cards.
+---
+
+# Flutter HTTP UI
+
+`comon_logger_dio_flutter` adds `HttpLogRecordRenderer` for `ComonLoggerScreen`.
+
+## Setup
+
+```dart
+ComonLoggerScreen(
+  handler: historyHandler,
+  renderers: const [
+    HttpLogRecordRenderer(showRequest: false),
+  ],
+)
+```
+
+## What it shows
+
+- method badge
+- status badge
+- duration
+- URL
+- request and response headers
+- request and response bodies
+- JSON-friendly expanded sections
+
+## Matching behavior
+
+The renderer works best with records emitted by `ComonDioInterceptor` because it expects the same `extra` payload shape.
+
+## Common use case
+
+Use `showRequest: false` when request cards are too noisy and you mostly care about responses and failures.
+
+## Renderer composition
+
+`HttpLogRecordRenderer` can live next to other custom renderers in the same screen. Put the most specific renderers first.

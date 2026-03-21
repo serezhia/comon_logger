@@ -1,0 +1,52 @@
+---
+title: Navigation logging
+description: Track Flutter route transitions with ComonNavigatorObserver and keep them in the same structured logging pipeline.
+---
+
+# Navigation logging
+
+`comon_logger_navigation_flutter` provides `ComonNavigatorObserver`.
+
+## Setup
+
+```dart
+import 'package:flutter/material.dart';
+import 'package:comon_logger_navigation_flutter/comon_logger_navigation_flutter.dart';
+
+MaterialApp(
+  navigatorObservers: [ComonNavigatorObserver()],
+)
+```
+
+## What it logs
+
+The observer emits records for:
+
+- `PUSH`
+- `POP`
+- `REPLACE`
+- `REMOVE`
+
+Each record uses:
+
+- `LogLevel.CONFIG`
+- `LogLayer.widgets`
+- `LogType.navigation`
+
+## Record payload
+
+Navigation records carry structured `extra` data such as:
+
+- `action`
+- `route`
+- `previousRoute`
+
+That makes them easy to filter in `ComonLoggerScreen` or future telemetry pipelines.
+
+## Custom logger name
+
+```dart
+ComonNavigatorObserver(loggerName: 'my_app.navigation')
+```
+
+Use a custom name when route events should live under your own logger namespace instead of the default `comon.navigation`.

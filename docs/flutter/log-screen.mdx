@@ -1,0 +1,70 @@
+---
+title: Log screen
+description: Configure ComonLoggerScreen with search, filters, actions, and specialized renderers.
+---
+
+# Log screen
+
+`ComonLoggerScreen` is the main Flutter UI surface for browsing logs in-app.
+
+## Basic usage
+
+```dart
+ComonLoggerScreen(
+  handler: historyHandler,
+)
+```
+
+## Add custom actions and renderers
+
+```dart
+ComonLoggerScreen(
+  handler: historyHandler,
+  renderers: const [
+    HttpLogRecordRenderer(showRequest: false),
+  ],
+  actions: const [
+    ImportLogsAction(),
+    ShareLogsAction(),
+  ],
+)
+```
+
+## Viewer behavior
+
+- newest-first ordering by default
+- incoming records do not force-scroll when auto-scroll is off
+- search covers message, logger name, and error text
+- detail cards expose stack trace and `extra`
+
+## Initial filtering
+
+```dart
+ComonLoggerScreen(
+  handler: historyHandler,
+  initialFilter: LogFilterState(
+    loggerNameQuery: 'dio',
+    types: {LogType.network},
+  ),
+)
+```
+
+Use this when opening a focused diagnostic screen rather than a general viewer.
+
+## Renderers
+
+Renderers are tried in order. The first match wins.
+
+That means specialized renderers like `HttpLogRecordRenderer` should usually come before the default fallback rendering.
+
+## Actions
+
+Actions are toolbar extensions. They are the right place for:
+
+- importing JSON logs
+- sharing exported logs
+- custom app-specific export or bug report flows
+
+## Practical rule
+
+Keep the screen generic and move domain-specific presentation into renderers or actions. That keeps `HistoryLogHandler` reusable across multiple tools.

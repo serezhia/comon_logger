@@ -1,0 +1,40 @@
+---
+title: Core
+description: Understand the logger hierarchy, record model, tags, filters, handlers, and formatter flow in comon_logger.
+---
+
+# Core
+
+The `comon_logger` core is intentionally small. It gives you one structured record model and one propagation model that all other packages build on.
+
+## Main building blocks
+
+| Piece | Responsibility |
+| --- | --- |
+| `Logger` | Publish records and manage named hierarchy |
+| `LogRecord` | Immutable structured event |
+| `LogFilter` | Decide whether a handler should process a record |
+| `LogHandler` | Send accepted records to some output |
+| `LogFormatter` | Convert records to text for a handler |
+
+## Record flow
+
+1. Application code calls `log.info(...)` or another level method.
+2. A `LogRecord` is created with message, time, metadata, and optional error data.
+3. The record propagates through the logger hierarchy.
+4. Each attached handler applies its own filter.
+5. Accepted records are handled directly or formatted first.
+
+## Default mental model
+
+- one `Logger.root`
+- many named child loggers
+- root handlers for global sinks
+- optional child-specific handlers for focused outputs
+
+<Cards>
+  <Card title="Tags" href="/docs/logger/core/tags" description="Learn how level, layer, type, and feature tags shape filtering and debugging." />
+  <Card title="Filters" href="/docs/logger/core/filters" description="Filter records by severity, architectural layer, type, or custom combinations." />
+  <Card title="Handlers" href="/docs/logger/core/handlers" description="Route records to console, files, memory, or custom destinations." />
+  <Card title="Formatters" href="/docs/logger/core/formatters" description="Format records as readable console output or specialized text." />
+</Cards>

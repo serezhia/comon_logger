@@ -1,0 +1,104 @@
+---
+title: Tags
+description: Use logger names and structured tags to keep logs filterable and meaningful.
+---
+
+# Tags
+
+Every `LogRecord` can carry typed metadata in addition to the message.
+
+## Logger hierarchy
+
+Named loggers use dot notation:
+
+```text
+Logger('dio.request') -> Logger('dio') -> Logger.root
+```
+
+That hierarchy matters because handlers on parent loggers receive child records.
+
+Typical naming strategy:
+
+- `my_app.catalog`
+- `my_app.auth`
+- `comon.dio`
+- `comon.navigation`
+
+## `LogLevel`
+
+Severity goes from low-noise development detail to hard production failure:
+
+- `FINEST`
+- `FINER`
+- `FINE`
+- `CONFIG`
+- `INFO`
+- `WARNING`
+- `SEVERE`
+- `SHOUT`
+- `OFF`
+
+Use `INFO` and above for normal app diagnostics. Keep `FINE*` for verbose development signals.
+
+## `LogLayer`
+
+`LogLayer` describes architectural origin.
+
+Built-in values include:
+
+- `data`
+- `domain`
+- `widgets`
+- `app`
+- `infra`
+
+Use it to separate infrastructure noise from business logic.
+
+## `LogType`
+
+`LogType` describes the category of work being logged.
+
+Common values include:
+
+- `network`
+- `database`
+- `navigation`
+- `logic`
+- `ui`
+- `lifecycle`
+- `analytics`
+- `performance`
+- `security`
+- `general`
+
+## `feature`
+
+`feature` is a free-form string for product area tagging:
+
+```dart
+log.info(
+  'Checkout loaded',
+  feature: 'checkout',
+  layer: LogLayer.app,
+  type: LogType.ui,
+);
+```
+
+Use this for app-specific grouping that the core package cannot know in advance.
+
+## `extra`
+
+`extra` carries structured payload data:
+
+```dart
+log.warning(
+  'Retry scheduled',
+  extra: {
+    'attempt': 3,
+    'delayMs': 500,
+    'requestId': 'abc-123',
+  },
+);
+```
+
+This is how integrations like Dio and navigation attach rich detail without flattening it into one string message.

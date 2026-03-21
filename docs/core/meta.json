@@ -1,0 +1,12 @@
+{
+    "title": "Core",
+    "description": "Tags, filters, handlers, and formatters.",
+    "root": true,
+    "pages": [
+        "index",
+        "tags",
+        "filters",
+        "handlers",
+        "formatters"
+    ]
+}

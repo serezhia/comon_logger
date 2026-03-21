@@ -1,0 +1,8 @@
+{
+    "title": "Navigation",
+    "description": "NavigatorObserver integration.",
+    "root": true,
+    "pages": [
+        "index"
+    ]
+}

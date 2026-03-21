@@ -1,0 +1,57 @@
+---
+title: Flutter
+description: Add in-app log history, open the viewer screen, and connect the same records to DevTools.
+---
+
+# Flutter
+
+`comon_logger_flutter` adds two major pieces to the ecosystem:
+
+- `HistoryLogHandler` for in-memory storage
+- `ComonLoggerScreen` for browsing those records inside the app
+
+## Minimal setup
+
+```dart
+import 'package:comon_logger/comon_logger.dart';
+import 'package:comon_logger_flutter/comon_logger_flutter.dart';
+
+final historyHandler = HistoryLogHandler(maxHistory: 2000);
+
+void initLogging() {
+  Logger.root.addHandler(ConsoleLogHandler());
+  Logger.root.addHandler(historyHandler);
+}
+```
+
+Open the screen like any other Flutter page:
+
+```dart
+Navigator.push(
+  context,
+  MaterialPageRoute(
+    builder: (_) => ComonLoggerScreen(handler: historyHandler),
+  ),
+);
+```
+
+## What the screen gives you
+
+- newest-first log list
+- search by message, logger name, and error text
+- filter chips for level, layer, and type
+- expandable details for stack trace and `extra`
+- custom actions and renderers
+
+## DevTools bridge
+
+```dart
+ComonLoggerServiceExtension(historyHandler).register();
+```
+
+That lets a DevTools extension consume the same stored records.
+
+<Cards>
+  <Card title="Log screen" href="/docs/logger/flutter/log-screen" description="Customize renderers, actions, search, and filtering behavior in the viewer." />
+  <Card title="History handler" href="/docs/logger/flutter/history-handler" description="Understand retention, streams, export, and session lifecycle." />
+</Cards>

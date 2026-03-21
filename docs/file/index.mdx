@@ -1,0 +1,78 @@
+---
+title: File logging
+description: Persist logs to rotating files with retention, text formatting, or JSON lines output.
+---
+
+# File logging
+
+`comon_logger_file` adds `FileLogHandler` for durable on-disk logging.
+
+## Minimal setup
+
+```dart
+import 'package:comon_logger/comon_logger.dart';
+import 'package:comon_logger_file/comon_logger_file.dart';
+
+final fileHandler = FileLogHandler(
+  directory: '/path/to/logs',
+  maxFileSize: 5 * 1024 * 1024,
+  maxFiles: 5,
+);
+
+await fileHandler.init();
+Logger.root.addHandler(fileHandler);
+```
+
+## Important lifecycle rule
+
+Call `init()` before attaching the handler to active logging paths.
+
+## Main options
+
+| Parameter | Meaning |
+| --- | --- |
+| `directory` | Target directory |
+| `baseFileName` | Base file name without extension |
+| `extension` | File extension |
+| `maxFileSize` | Rotation threshold |
+| `maxFiles` | Number of rotated files to keep |
+| `writeAsJson` | Write each record as JSON line |
+| `formatter` | Formatter used in text mode |
+
+## Rotation model
+
+When the active file exceeds `maxFileSize`, files are rotated in sequence and old files beyond `maxFiles` are deleted.
+
+Typical shape:
+
+- `comon_log.txt`
+- `comon_log_1.txt`
+- `comon_log_2.txt`
+
+## JSON lines mode
+
+```dart
+final fileHandler = FileLogHandler(
+  directory: '/path/to/logs',
+  writeAsJson: true,
+);
+```
+
+Use this when logs need to be machine-readable or forwarded to another tool.
+
+## Flush and close
+
+```dart
+fileHandler.flush();
+await fileHandler.close();
+```
+
+Use `close()` during controlled app or server shutdown.
+
+## Best fit
+
+- backend services
+- CLI tools
+- desktop or mobile debugging where logs must survive restart
+
+Pair it with `ConsoleLogHandler` when you want both local readability and durable persistence.

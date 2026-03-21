@@ -1,0 +1,42 @@
+---
+title: Sharing and export
+description: Add ShareLogsAction to ComonLoggerScreen and export logs as text or JSON.
+---
+
+# Sharing and export
+
+`comon_logger_share_flutter` adds `ShareLogsAction` for `ComonLoggerScreen`.
+
+## Setup
+
+```dart
+import 'package:comon_logger_flutter/comon_logger_flutter.dart';
+import 'package:comon_logger_share_flutter/comon_logger_share_flutter.dart';
+
+ComonLoggerScreen(
+  handler: historyHandler,
+  actions: const [
+    ShareLogsAction(),
+    ImportLogsAction(),
+  ],
+)
+```
+
+## Export modes
+
+- formatted plain text for quick debugging
+- JSON for round-trip import or external processing
+
+## Why it is a separate package
+
+Sharing depends on platform integrations like `share_plus`, so the functionality lives outside `comon_logger_flutter` to keep the base viewer lightweight.
+
+## Good use cases
+
+- send logs from a QA device
+- attach logs to a bug report
+- export JSON and re-import into another app or tool
+
+## Practical note
+
+Use it together with `HistoryLogHandler`. Sharing only makes sense when logs are already stored in memory by the viewer stack.

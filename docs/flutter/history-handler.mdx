@@ -1,0 +1,55 @@
+---
+title: History handler
+description: Store log records in memory, observe the stream, export the session, and understand retention behavior.
+---
+
+# History handler
+
+`HistoryLogHandler` stores records in memory for the current app session.
+
+## Setup
+
+```dart
+final historyHandler = HistoryLogHandler(maxHistory: 2000);
+Logger.root.addHandler(historyHandler);
+```
+
+## Main capabilities
+
+- keep an in-memory history list
+- expose a stream for reactive UI updates
+- export formatted text
+- export JSON for import or remote diagnostics
+
+## Access the stored records
+
+```dart
+final history = historyHandler.history;
+final stream = historyHandler.onRecord;
+```
+
+## Export
+
+```dart
+final text = historyHandler.export();
+final json = historyHandler.exportJson();
+```
+
+Use text for quick debugging and JSON when you need round-trip import/export.
+
+## Retention behavior
+
+`maxHistory` is a hard cap. When the limit is exceeded, the oldest records are dropped.
+
+That means it is a bounded in-memory buffer, not long-term persistence.
+
+## When to use it
+
+- in-app debugging
+- temporary diagnostics during QA
+- feeding `ComonLoggerScreen`
+- feeding the DevTools extension bridge
+
+## When not to use it alone
+
+Do not rely on `HistoryLogHandler` as the only record sink when you need durable diagnostics after an app restart. Pair it with [File logging](/docs/logger/file) or another persistent handler.

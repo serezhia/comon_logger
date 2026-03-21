@@ -1,0 +1,78 @@
+---
+title: comon_logger
+description: Composable logging docs for Dart and Flutter with core, Flutter UI, HTTP, file, sharing, and navigation integrations.
+---
+
+# comon_logger docs
+
+`comon_logger` is a logging ecosystem for Dart and Flutter built around one shared model:
+
+- named hierarchical loggers
+- typed metadata on every record
+- per-handler filters
+- pluggable handlers and formatters
+- optional integrations layered on top of the zero-dependency core
+
+The ecosystem is split into focused packages so you can keep the core small and add UI, HTTP logging, file persistence, or sharing only where needed.
+
+## Package matrix
+
+| Package | Use it for | When to add it |
+| --- | --- | --- |
+| `comon_logger` | Core logger, filters, handlers, formatters | Always start here |
+| `comon_logger_flutter` | In-app viewer and session history | You want to inspect logs inside a Flutter app |
+| `comon_logger_dio` | Dio interceptor and HTTP console formatter | You use Dio and want structured network logs |
+| `comon_logger_dio_flutter` | Rich HTTP cards in the Flutter viewer | You already log Dio requests into `HistoryLogHandler` |
+| `comon_logger_file` | Rotating file persistence | You need on-disk logs for backend or app diagnostics |
+| `comon_logger_navigation_flutter` | `NavigatorObserver` with structured route events | You want route transitions in the same logging pipeline |
+| `comon_logger_share_flutter` | Share/export action for the viewer | You need to export logs from a Flutter device |
+| `comon_logger_devtools_extension` | DevTools panel support | You want logs streamed into a custom DevTools tab |
+
+## Typical setups
+
+### Console only
+
+Use `comon_logger` with `ConsoleLogHandler`.
+
+### Flutter app diagnostics
+
+Use `comon_logger` + `comon_logger_flutter`, then add HTTP, share, and navigation packages as needed.
+
+### Backend or CLI service
+
+Use `comon_logger` + `comon_logger_file` for console plus rotating disk output.
+
+### Full mobile debugging stack
+
+Use:
+
+- `comon_logger`
+- `comon_logger_flutter`
+- `comon_logger_dio`
+- `comon_logger_dio_flutter`
+- `comon_logger_navigation_flutter`
+- `comon_logger_share_flutter`
+
+## Design rules
+
+1. Keep `Logger.root` as the aggregation point for app-wide handlers.
+2. Use typed tags like `LogLayer` and `LogType` instead of encoding everything into the message.
+3. Filter at the handler level so different outputs can keep different noise thresholds.
+4. Treat Flutter UI and DevTools integrations as optional consumers of the same structured records.
+
+<Cards>
+  <Card title="Getting started" href="/docs/logger/getting-started" description="Install the core package, attach a console handler, and emit the first records." />
+  <Card title="Core" href="/docs/logger/core" description="Learn the record model, logger hierarchy, filters, handlers, and formatter pipeline." />
+  <Card title="Flutter" href="/docs/logger/flutter" description="Add `HistoryLogHandler`, open the in-app viewer, and plug into DevTools." />
+  <Card title="Dio" href="/docs/logger/dio" description="Capture structured HTTP logs and render them in the console or Flutter UI." />
+  <Card title="File logging" href="/docs/logger/file" description="Persist logs to rotating files with retention and optional JSON lines output." />
+  <Card title="Navigation" href="/docs/logger/navigation" description="Record route transitions through `NavigatorObserver`." />
+  <Card title="Sharing" href="/docs/logger/share" description="Export or share logs from the Flutter log viewer." />
+</Cards>
+
+## Recommended path
+
+1. Start with [Getting started](/docs/logger/getting-started).
+2. Read [Core](/docs/logger/core) to understand the data model and filter pipeline.
+3. Add [Flutter](/docs/logger/flutter) or [Dio](/docs/logger/dio) depending on your app shape.
+4. Add [File logging](/docs/logger/file), [Navigation](/docs/logger/navigation), and [Sharing](/docs/logger/share) as focused extensions.

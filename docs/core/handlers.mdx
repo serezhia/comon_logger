@@ -1,0 +1,60 @@
+---
+title: Handlers
+description: Route records to console, memory, files, or custom outputs with per-handler filtering.
+---
+
+# Handlers
+
+Handlers are the output side of the pipeline.
+
+## Built-in handlers across the ecosystem
+
+| Handler | Package | Purpose |
+| --- | --- | --- |
+| `ConsoleLogHandler` | `comon_logger` | Human-readable terminal output |
+| `HistoryLogHandler` | `comon_logger_flutter` | In-memory session history for Flutter UI and DevTools |
+| `FileLogHandler` | `comon_logger_file` | Rotating disk persistence |
+
+## Console handler
+
+```dart
+Logger.root.addHandler(
+  ConsoleLogHandler(
+    filter: const LevelLogFilter(LogLevel.INFO),
+    formatter: PrettyLogFormatter(),
+  ),
+);
+```
+
+`ConsoleLogHandler` can also try specialized formatter add-ons before the fallback formatter.
+
+## Custom handler
+
+When you need your own sink, extend `LogHandler`:
+
+```dart
+class AnalyticsLogHandler extends LogHandler {
+  const AnalyticsLogHandler({super.filter});
+
+  @override
+  void handle(LogRecord record) {
+    // Send record to analytics or telemetry backend.
+  }
+}
+```
+
+## Where to attach handlers
+
+Attach app-wide sinks to `Logger.root`:
+
+```dart
+Logger.root.addHandler(ConsoleLogHandler());
+```
+
+Attach local sinks only when you intentionally want a subtree-specific output.
+
+## Pitfalls
+
+- Logger names are cached, so reused names point to the same logger instance.
+- A handler on a parent logger will still see child records unless filtered out.
+- Some handlers like `FileLogHandler` or `HistoryLogHandler` have their own lifecycle or storage constraints. Read their dedicated sections before using them in production.
