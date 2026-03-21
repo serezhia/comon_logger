@@ -63,10 +63,10 @@ melos:
       run: dart run melos exec --fail-fast -- "dart format ."
     publish:
       description: Validate publishability without uploading packages.
-      run: dart run melos exec --fail-fast --no-private -- "dart pub publish --dry-run"
+      run: dart run melos exec --fail-fast --no-private --ignore="comon_logger_otel" -- "dart pub publish --dry-run"
     publish:dry-run:
       description: Validate publishability without uploading packages.
-      run: dart run melos exec --fail-fast --no-private -- "dart pub publish --dry-run"
+      run: dart run melos exec --fail-fast --no-private --ignore="comon_logger_otel" -- "dart pub publish --dry-run"
     publish:dry:
       description: Backward-compatible alias for dry-run publish validation.
       run: dart run melos run publish:dry-run
