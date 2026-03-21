@@ -1,0 +1,134 @@
+---
+title: OpenTelemetry
+description: Send comon_logger records into comon_otel with severity mapping and trace correlation.
+---
+
+# OpenTelemetry
+
+`comon_logger_otel` connects `comon_logger` to `comon_otel`.
+
+Use it when the app already emits traces or metrics through OpenTelemetry and logs should go to the same collector or backend.
+
+## What the package does
+
+- implements `OtelLogHandler` as a normal `LogHandler`
+- converts `LogRecord` into `comon_otel` log records
+- maps `LogLevel` to OpenTelemetry `SeverityNumber`
+- preserves structured metadata such as `layer`, `type`, `feature`, and `extra`
+- automatically attaches the active span context from `OtelContext`
+
+That last point is the main value: logs written inside an active trace are exported with the same trace and span identifiers.
+
+## Install
+
+```bash
+dart pub add comon_logger_otel
+```
+
+For Flutter:
+
+```bash
+flutter pub add comon_logger_otel
+```
+
+You also need a configured `comon_otel` SDK instance.
+
+## Minimal setup
+
+```dart
+import 'package:comon_logger/comon_logger.dart';
+import 'package:comon_logger_otel/comon_logger_otel.dart';
+import 'package:comon_otel/comon_otel.dart';
+
+Future<void> main() async {
+  await Otel.init(
+    serviceName: 'catalog-api',
+    exporter: OtelExporter.console,
+  );
+
+  Logger.root.addHandler(ConsoleLogHandler());
+  Logger.root.addHandler(OtelLogHandler());
+
+  final log = Logger('catalog.service');
+  log.info('Application started', feature: 'catalog');
+}
+```
+
+## Severity mapping
+
+`comon_logger_otel` keeps the `comon_logger` level model but exports compatible OpenTelemetry severities.
+
+| `comon_logger` level | OpenTelemetry severity |
+| --- | --- |
+| `FINEST` | `TRACE` |
+| `FINER` | `TRACE2` |
+| `FINE` | `DEBUG` |
+| `CONFIG` | `DEBUG2` |
+| `INFO` | `INFO` |
+| `WARNING` | `WARN` |
+| `SEVERE` | `ERROR` |
+| `SHOUT` | `FATAL` |
+
+## Exported attributes
+
+Each emitted log carries the original message body plus structured attributes.
+
+| Source field | Exported attribute |
+| --- | --- |
+| `loggerName` | `logger.name` |
+| `level.name` | `comon.log.level` |
+| `layer` | `comon.log.layer` |
+| `type` | `comon.log.type` |
+| `feature` | `comon.log.feature` |
+| `error` | `exception.type`, `exception.message` |
+| `stackTrace` | `exception.stacktrace` |
+| `extra` | flattened as `comon.log.extra.*` |
+
+Nested `extra` maps are flattened recursively so observability backends can filter on individual fields.
+
+## Filtering
+
+Because `OtelLogHandler` is just another `LogHandler`, you can keep one noise threshold for local console output and a different threshold for exported logs.
+
+```dart
+Logger.root.addHandler(
+  OtelLogHandler(
+    filter: const LevelLogFilter(LogLevel.WARNING),
+  ),
+);
+```
+
+## Trace correlation
+
+If a log is emitted inside an active OpenTelemetry span, `comon_logger_otel` exports the matching trace and span IDs automatically.
+
+```dart
+await Otel.instance.tracer.traceAsync(
+  'create-user',
+  fn: () async {
+    final log = Logger('user.service');
+    log.info('Validating payload');
+    log.info('User created', feature: 'signup');
+  },
+);
+```
+
+In the backend this means the logs can be displayed directly on the trace for `create-user` instead of being a disconnected stream.
+
+## Recommended pairing
+
+The package becomes more useful when paired with other instrumented integrations:
+
+- [OpenTelemetry Dio](/docs/otel/dio) for outbound HTTP spans
+- [ORM OpenTelemetry](/docs/orm/otel) for database spans and metrics
+- [OpenTelemetry core](/docs/otel/core) for exporter and processor configuration
+
+## When to use it
+
+Use `comon_logger_otel` when:
+
+- logs should land in OTLP-compatible backends such as Grafana, Tempo, Loki pipelines, or vendor observability stacks
+- trace and log correlation matters more than local-only formatting
+- you already standardized on `comon_otel` in the service or app
+
+Do not use it as a replacement for local developer ergonomics. Keep `ConsoleLogHandler` or Flutter history handlers when local inspection is still part of the workflow.

@@ -1,0 +1,23 @@
+name: comon_logger_otel
+description: OpenTelemetry log bridge for comon_logger.
+version: 0.1.2
+resolution: workspace
+homepage: https://github.com/serezhia/comon_logger
+repository: https://github.com/serezhia/comon_logger/tree/main/packages/comon_logger_otel
+issue_tracker: https://github.com/serezhia/comon_logger/issues
+topics:
+  - logging
+  - opentelemetry
+  - observability
+  - tracing
+
+environment:
+  sdk: ^3.9.0
+
+dependencies:
+  comon_logger: ^0.1.2
+  comon_otel: ^0.0.1-alpha.1
+
+dev_dependencies:
+  lints: ^6.0.0
+  test: ^1.26.3

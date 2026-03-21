@@ -12,13 +12,14 @@ and navigation tracking.
 - Typed metadata: `LogLevel`, `LogLayer`, `LogType`, `feature`
 - Pluggable handlers, filters, and formatter add-ons
 - Rich Flutter viewer for live logs inside the app
-- Dedicated packages for Dio, file logging, share, and navigation
+- Dedicated packages for Dio, file logging, OpenTelemetry export, share, and navigation
 
 ## Package Matrix
 
 | Package | Use it for | pub.dev |
 |---------|------------|---------|
 | [comon_logger](packages/comon_logger/) | Core logging primitives, handlers, filters, formatters, logger hierarchy | [![pub](https://img.shields.io/pub/v/comon_logger.svg)](https://pub.dev/packages/comon_logger) |
+| [comon_logger_otel](packages/comon_logger_otel/) | Bridge `comon_logger` records into OpenTelemetry logs with trace correlation | [![pub](https://img.shields.io/pub/v/comon_logger_otel.svg)](https://pub.dev/packages/comon_logger_otel) |
 | [comon_logger_flutter](packages/comon_logger_flutter/) | In-app Flutter log screen, `HistoryLogHandler`, DevTools service extension | [![pub](https://img.shields.io/pub/v/comon_logger_flutter.svg)](https://pub.dev/packages/comon_logger_flutter) |
 | [comon_logger_dio](packages/comon_logger_dio/) | Dio interceptor plus rich HTTP console formatter | [![pub](https://img.shields.io/pub/v/comon_logger_dio.svg)](https://pub.dev/packages/comon_logger_dio) |
 | [comon_logger_dio_flutter](packages/comon_logger_dio_flutter/) | HTTP renderer for `ComonLoggerScreen` | [![pub](https://img.shields.io/pub/v/comon_logger_dio_flutter.svg)](https://pub.dev/packages/comon_logger_dio_flutter) |
@@ -31,6 +32,7 @@ and navigation tracking.
 | Layer | Packages |
 |------|----------|
 | Core | `comon_logger` |
+| Observability export | `comon_logger_otel` |
 | Flutter viewer | `comon_logger_flutter` |
 | Console HTTP | `comon_logger_dio` |
 | Flutter HTTP UI | `comon_logger_dio_flutter` |
@@ -121,7 +123,7 @@ dart run melos run publish:dry-run
 Publish packages in dependency order:
 
 1. `comon_logger`
-2. `comon_logger_flutter`, `comon_logger_dio`, `comon_logger_file`
+2. `comon_logger_otel`, `comon_logger_flutter`, `comon_logger_dio`, `comon_logger_file`
 3. `comon_logger_dio_flutter`, `comon_logger_share_flutter`, `comon_logger_navigation_flutter`
 
 ## License
