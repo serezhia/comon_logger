@@ -1,5 +1,6 @@
 import 'package:comon_logger/comon_logger.dart';
 import 'package:flutter/material.dart';
+import '../l10n/comon_logger_strings.dart';
 
 /// Filter state for the log viewer.
 class LogFilterState {
@@ -100,6 +101,7 @@ class LogFilterPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final strings = ComonLoggerStrings.of(context);
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
@@ -116,7 +118,7 @@ class LogFilterPanel extends StatelessWidget {
           // Level chips
           _buildSection(
             context,
-            label: 'Level',
+            label: strings.level,
             child: Wrap(
               spacing: 6,
               runSpacing: 4,
@@ -140,7 +142,7 @@ class LogFilterPanel extends StatelessWidget {
           // Layer chips
           _buildSection(
             context,
-            label: 'Layer',
+            label: strings.layer,
             child: Wrap(
               spacing: 6,
               runSpacing: 4,
@@ -164,7 +166,7 @@ class LogFilterPanel extends StatelessWidget {
           // Type chips
           _buildSection(
             context,
-            label: 'Type',
+            label: strings.type,
             child: Wrap(
               spacing: 6,
               runSpacing: 4,
@@ -190,14 +192,14 @@ class LogFilterPanel extends StatelessWidget {
             children: [
               Expanded(
                 child: TextField(
-                  decoration: const InputDecoration(
-                    labelText: 'Feature',
+                  decoration: InputDecoration(
+                    labelText: strings.feature,
                     isDense: true,
-                    contentPadding: EdgeInsets.symmetric(
+                    contentPadding: const EdgeInsets.symmetric(
                       horizontal: 8,
                       vertical: 8,
                     ),
-                    border: OutlineInputBorder(),
+                    border: const OutlineInputBorder(),
                   ),
                   style: const TextStyle(fontSize: 13),
                   onChanged: (val) =>
@@ -207,14 +209,14 @@ class LogFilterPanel extends StatelessWidget {
               const SizedBox(width: 8),
               Expanded(
                 child: TextField(
-                  decoration: const InputDecoration(
-                    labelText: 'Logger name',
+                  decoration: InputDecoration(
+                    labelText: strings.loggerName,
                     isDense: true,
-                    contentPadding: EdgeInsets.symmetric(
+                    contentPadding: const EdgeInsets.symmetric(
                       horizontal: 8,
                       vertical: 8,
                     ),
-                    border: OutlineInputBorder(),
+                    border: const OutlineInputBorder(),
                   ),
                   style: const TextStyle(fontSize: 13),
                   onChanged: (val) => onFilterChanged(
@@ -233,9 +235,9 @@ class LogFilterPanel extends StatelessWidget {
               child: TextButton.icon(
                 onPressed: () => onFilterChanged(LogFilterState()),
                 icon: const Icon(Icons.clear_all, size: 18),
-                label: const Text(
-                  'Reset filters',
-                  style: TextStyle(fontSize: 12),
+                label: Text(
+                  strings.resetFilters,
+                  style: const TextStyle(fontSize: 12),
                 ),
               ),
             ),

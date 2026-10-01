@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:comon_logger/comon_logger.dart';
 import 'package:flutter/material.dart';
+import '../l10n/comon_logger_strings.dart';
 import 'package:flutter/services.dart';
 
 import '../handlers/history_log_handler.dart';
@@ -28,7 +29,7 @@ class ImportLogsAction extends LogScreenAction {
   Widget build(BuildContext context, HistoryLogHandler handler) {
     return IconButton(
       icon: const Icon(Icons.file_open_outlined),
-      tooltip: 'Import logs from JSON',
+      tooltip: ComonLoggerStrings.of(context).importTooltip,
       onPressed: () => _importLogs(context, handler),
     );
   }
@@ -37,27 +38,26 @@ class ImportLogsAction extends LogScreenAction {
     BuildContext context,
     HistoryLogHandler handler,
   ) async {
+    // The dialog is a separate route, outside the screen's strings scope.
+    final strings = ComonLoggerStrings.of(context);
     final controller = TextEditingController();
     final result = await showDialog<String>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Import logs'),
+        title: Text(strings.importTitle),
         content: SizedBox(
           width: double.maxFinite,
           height: 300,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const Text(
-                'Paste JSON from exportJson() or a log file below:',
-                style: TextStyle(fontSize: 13),
-              ),
+              Text(strings.importHint, style: const TextStyle(fontSize: 13)),
               const SizedBox(height: 8),
               Row(
                 children: [
                   TextButton.icon(
                     icon: const Icon(Icons.content_paste, size: 16),
-                    label: const Text('Paste from clipboard'),
+                    label: Text(strings.pasteFromClipboard),
                     onPressed: () async {
                       final data = await Clipboard.getData('text/plain');
                       if (data?.text != null) {
@@ -87,11 +87,11 @@ class ImportLogsAction extends LogScreenAction {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text('Cancel'),
+            child: Text(strings.cancel),
           ),
           FilledButton(
             onPressed: () => Navigator.pop(ctx, controller.text),
-            child: const Text('Import'),
+            child: Text(strings.import),
           ),
         ],
       ),
@@ -122,13 +122,13 @@ class ImportLogsAction extends LogScreenAction {
       if (context.mounted) {
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(SnackBar(content: Text('Imported $count log records')));
+        ).showSnackBar(SnackBar(content: Text(strings.imported(count))));
       }
     } catch (e) {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Import failed: $e'),
+            content: Text(strings.importFailed(e)),
             backgroundColor: Colors.red,
           ),
         );

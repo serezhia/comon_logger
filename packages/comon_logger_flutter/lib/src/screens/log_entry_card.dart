@@ -1,5 +1,6 @@
 import 'package:comon_logger/comon_logger.dart';
 import 'package:flutter/material.dart';
+import '../l10n/comon_logger_strings.dart';
 import 'package:flutter/services.dart';
 
 import 'log_record_renderer.dart';
@@ -179,13 +180,15 @@ class _LogEntryCardState extends State<LogEntryCard> {
     LogRecordRenderer? renderer,
   ) {
     final widgets = <Widget>[];
+    final strings = ComonLoggerStrings.of(context);
 
     // Tags row
     final showTags = renderer?.showExtraTags(record) ?? true;
     final tags = <String>[
-      if (showTags && record.layer != null) 'Layer: ${record.layer}',
-      if (showTags && record.type != null) 'Type: ${record.type}',
-      if (showTags && record.feature != null) 'Feature: ${record.feature}',
+      if (showTags && record.layer != null) '${strings.layer}: ${record.layer}',
+      if (showTags && record.type != null) '${strings.type}: ${record.type}',
+      if (showTags && record.feature != null)
+        '${strings.feature}: ${record.feature}',
     ];
     if (tags.isNotEmpty) {
       widgets.add(const SizedBox(height: 8));
@@ -218,7 +221,7 @@ class _LogEntryCardState extends State<LogEntryCard> {
             borderRadius: BorderRadius.circular(4),
           ),
           child: SelectableText(
-            'Error: ${record.error}',
+            '${strings.error}: ${record.error}',
             style: const TextStyle(
               fontSize: 12,
               color: Colors.red,
@@ -287,9 +290,9 @@ class _LogEntryCardState extends State<LogEntryCard> {
     Clipboard.setData(ClipboardData(text: text));
     if (context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Log copied to clipboard'),
-          duration: Duration(seconds: 1),
+        SnackBar(
+          content: Text(ComonLoggerStrings.of(context).copiedToClipboard),
+          duration: const Duration(seconds: 1),
         ),
       );
     }

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:comon_logger/comon_logger.dart';
 import 'package:flutter/material.dart';
+import '../l10n/comon_logger_strings.dart';
 
 import '../handlers/history_log_handler.dart';
 import 'log_entry_card.dart';
@@ -48,6 +49,7 @@ class ComonLoggerScreen extends StatefulWidget {
     this.showFilterButton = false,
     this.showClearButton = true,
     this.reverseOrder = true,
+    this.strings,
   });
 
   /// The [HistoryLogHandler] providing log records.
@@ -92,6 +94,10 @@ class ComonLoggerScreen extends StatefulWidget {
   /// the screen still opens at the top of the list.
   /// Defaults to `true`.
   final bool reverseOrder;
+
+  /// Interface text. When `null`, the nearest [ComonLoggerStringsScope] is
+  /// used, or English defaults.
+  final ComonLoggerStrings? strings;
 
   @override
   State<ComonLoggerScreen> createState() => _ComonLoggerScreenState();
@@ -143,6 +149,12 @@ class _ComonLoggerScreenState extends State<ComonLoggerScreen> {
 
       setState(() {
         _records.add(record);
+        // Keep the open screen as bounded as the handler's history.
+        final excess = _records.length - widget.handler.maxHistory;
+        if (excess > 0) {
+          _expandedRecords.removeAll(_records.take(excess));
+          _records.removeRange(0, excess);
+        }
         _applyFilters();
       });
 
@@ -202,14 +214,23 @@ class _ComonLoggerScreenState extends State<ComonLoggerScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final strings = widget.strings ?? ComonLoggerStrings.of(context);
+    return ComonLoggerStringsScope(
+      strings: strings,
+      // A context below the scope, so actions and children can read it.
+      child: Builder(builder: (context) => _buildScaffold(context, strings)),
+    );
+  }
+
+  Widget _buildScaffold(BuildContext context, ComonLoggerStrings strings) {
     return Scaffold(
       appBar: AppBar(
         title: _showSearch
             ? TextField(
                 controller: _searchController,
                 autofocus: true,
-                decoration: const InputDecoration(
-                  hintText: 'Search logs...',
+                decoration: InputDecoration(
+                  hintText: strings.searchHint,
                   border: InputBorder.none,
                 ),
                 onChanged: (val) {
@@ -219,13 +240,13 @@ class _ComonLoggerScreenState extends State<ComonLoggerScreen> {
                   });
                 },
               )
-            : const Text('Logs'),
+            : Text(strings.title),
         actions: [
           // Search toggle
           if (widget.showSearchButton)
             IconButton(
               icon: Icon(_showSearch ? Icons.close : Icons.search),
-              tooltip: _showSearch ? 'Close search' : 'Search',
+              tooltip: _showSearch ? strings.closeSearch : strings.search,
               onPressed: () {
                 setState(() {
                   _showSearch = !_showSearch;
@@ -246,7 +267,7 @@ class _ComonLoggerScreenState extends State<ComonLoggerScreen> {
                     ? Theme.of(context).colorScheme.primary
                     : null,
               ),
-              tooltip: 'Filters',
+              tooltip: strings.filters,
               onPressed: () => setState(() => _showFilters = !_showFilters),
             ),
           // Auto-scroll toggle
@@ -256,7 +277,7 @@ class _ComonLoggerScreenState extends State<ComonLoggerScreen> {
                   ? Icons.vertical_align_bottom
                   : Icons.vertical_align_center,
             ),
-            tooltip: _autoScroll ? 'Auto-scroll on' : 'Auto-scroll off',
+            tooltip: _autoScroll ? strings.autoScrollOn : strings.autoScrollOff,
             onPressed: () => setState(() => _autoScroll = !_autoScroll),
           ),
           // Pluggable actions
@@ -266,7 +287,7 @@ class _ComonLoggerScreenState extends State<ComonLoggerScreen> {
           if (widget.showClearButton)
             IconButton(
               icon: const Icon(Icons.delete_outline),
-              tooltip: 'Clear logs',
+              tooltip: strings.clearLogs,
               onPressed: _clearLogs,
             ),
         ],
@@ -299,7 +320,7 @@ class _ComonLoggerScreenState extends State<ComonLoggerScreen> {
             child: Row(
               children: [
                 Text(
-                  '${_filteredRecords.length} / ${_records.length} logs',
+                  strings.recordCount(_filteredRecords.length, _records.length),
                   style: TextStyle(
                     fontSize: 11,
                     color: Theme.of(
@@ -317,8 +338,8 @@ class _ComonLoggerScreenState extends State<ComonLoggerScreen> {
                 ? Center(
                     child: Text(
                       _records.isEmpty
-                          ? 'No logs yet'
-                          : 'No logs match filters',
+                          ? strings.noLogsYet
+                          : strings.noLogsMatch,
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                         color: Theme.of(
                           context,
