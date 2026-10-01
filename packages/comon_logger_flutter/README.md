@@ -51,6 +51,7 @@ void openLogs(BuildContext context) {
 | `HistoryLogHandler` | Stores log history for the current app session |
 | `ComonLoggerScreen` | Full-screen log browser for Flutter |
 | `ImportLogsAction` | Built-in import action for JSON logs |
+| `ComonLoggerStrings` | Interface text of the viewer, English by default |
 
 ## Viewer behavior
 
@@ -61,6 +62,26 @@ void openLogs(BuildContext context) {
 - Filter chips for `LogLevel`, `LogLayer`, and `LogType`
 - Long-press copy support
 - Expand/collapse cards for full details
+- History and the open screen keep at most `maxHistory` records (default 1000)
+
+## Translating the viewer
+
+Every visible text comes from `ComonLoggerStrings`. Pass translated values to
+the screen, or provide them with `ComonLoggerStringsScope` above it:
+
+```dart
+ComonLoggerScreen(
+  handler: historyHandler,
+  strings: ComonLoggerStrings(
+    title: l10n.logsTitle,
+    clearLogs: l10n.logsClear,
+    recordCount: (shown, total) => l10n.logsCount(shown, total),
+  ),
+)
+```
+
+Custom actions read the current strings with `ComonLoggerStrings.of(context)`.
+Text copied to the clipboard or exported stays in English.
 
 ## Composing renderers and actions
 

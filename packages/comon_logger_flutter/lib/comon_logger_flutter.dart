@@ -1,4 +1,5 @@
 export 'src/handlers/history_log_handler.dart';
+export 'src/l10n/comon_logger_strings.dart';
 export 'src/screens/comon_logger_screen.dart';
 export 'src/screens/log_entry_card.dart';
 export 'src/screens/log_filter_panel.dart';
