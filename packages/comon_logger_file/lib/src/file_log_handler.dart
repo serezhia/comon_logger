@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:comon_logger/comon_logger.dart';
 
@@ -17,6 +19,16 @@ import 'package:comon_logger/comon_logger.dart';
 /// 1. Current file `comon_log.txt` → `comon_log_1.txt`
 /// 2. Existing `comon_log_1.txt` → `comon_log_2.txt`, etc.
 /// 3. Files beyond [maxFiles] are deleted.
+///
+/// ## Buffering
+///
+/// Records are encoded at once but written in batches, so logging does not
+/// cost a synchronous disk write per record on the caller's isolate. Pending
+/// lines are written when [flushInterval] elapses after the first of them,
+/// when they reach [maxBufferBytes], when a record at [flushLevel] or above
+/// arrives (so the lines before a crash are on disk), and on [flush] and
+/// [close]. Call [flush] when the app goes to the background.
+/// `flushInterval: Duration.zero` writes every record immediately.
 class FileLogHandler extends LogHandler {
   /// Creates a file log handler.
   ///
@@ -30,7 +42,12 @@ class FileLogHandler extends LogHandler {
     super.filter = const AllPassLogFilter(),
     LogFormatter? formatter,
     this.writeAsJson = false,
-  }) : _formatter = formatter ?? const SimpleLogFormatter();
+    this.flushInterval = const Duration(milliseconds: 500),
+    this.maxBufferBytes = 64 * 1024,
+    this.flushLevel = LogLevel.SEVERE,
+  }) : assert(!flushInterval.isNegative),
+       assert(maxBufferBytes >= 0),
+       _formatter = formatter ?? const SimpleLogFormatter();
 
   /// The directory where log files are stored.
   final String directory;
@@ -52,6 +69,20 @@ class FileLogHandler extends LogHandler {
 
   /// When `true`, records are written as JSON (one object per line).
   final bool writeAsJson;
+
+  /// How long a pending line may wait before it is written.
+  final Duration flushInterval;
+
+  /// Pending bytes that trigger a write without waiting for [flushInterval].
+  final int maxBufferBytes;
+
+  /// Records at this level or above are written together with everything
+  /// pending before them, immediately.
+  final LogLevel flushLevel;
+
+  final List<List<int>> _pending = [];
+  int _pendingBytes = 0;
+  Timer? _flushTimer;
 
   RandomAccessFile? _raf;
   File? _currentFile;
@@ -93,16 +124,42 @@ class FileLogHandler extends LogHandler {
         : _formatter.format(record);
 
     _writeLine(line);
+    if (record.level >= flushLevel) flush();
   }
 
   void _writeLine(String line) {
     final bytes = utf8.encode('$line\n');
-    _raf!.writeFromSync(bytes);
-    _currentSize += bytes.length;
+    _pending.add(bytes);
+    _pendingBytes += bytes.length;
 
-    if (_currentSize >= maxFileSize) {
-      _rotateSync();
+    // Written lines reach the OS and survive an app crash; only [flush] also
+    // forces them to the storage device.
+    if (flushInterval == Duration.zero || _pendingBytes >= maxBufferBytes) {
+      _writePending();
+    } else {
+      _flushTimer ??= Timer(flushInterval, _writePending);
     }
+  }
+
+  /// Writes pending lines, rotating at the same line boundaries as an
+  /// unbuffered write would.
+  void _writePending() {
+    _flushTimer?.cancel();
+    _flushTimer = null;
+    if (_pending.isEmpty || _raf == null) return;
+
+    final chunk = BytesBuilder(copy: false);
+    for (final bytes in _pending) {
+      chunk.add(bytes);
+      _currentSize += bytes.length;
+      if (_currentSize >= maxFileSize) {
+        _raf!.writeFromSync(chunk.takeBytes());
+        _rotateSync();
+      }
+    }
+    if (chunk.isNotEmpty) _raf!.writeFromSync(chunk.takeBytes());
+    _pending.clear();
+    _pendingBytes = 0;
   }
 
   /// Rotates log files synchronously.
@@ -135,11 +192,15 @@ class FileLogHandler extends LogHandler {
     _currentSize = 0;
   }
 
-  /// Flushes the write buffer to disk.
-  void flush() => _raf?.flushSync();
+  /// Writes pending lines and flushes the file to disk.
+  void flush() {
+    _writePending();
+    _raf?.flushSync();
+  }
 
   /// Closes the file. Call when the handler is no longer needed.
   Future<void> close() async {
+    _writePending();
     _raf?.flushSync();
     _raf?.closeSync();
     _raf = null;
