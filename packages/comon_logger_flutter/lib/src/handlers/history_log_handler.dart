@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:collection';
 import 'dart:convert';
 
 import 'package:comon_logger/comon_logger.dart';
@@ -11,12 +12,13 @@ class HistoryLogHandler extends LogHandler {
   HistoryLogHandler({
     super.filter = const AllPassLogFilter(),
     this.maxHistory = 1000,
-  });
+  }) : assert(maxHistory > 0);
 
   /// Maximum number of records to keep in memory.
   final int maxHistory;
 
-  final List<LogRecord> _history = [];
+  // A queue so dropping the oldest record is O(1) once history is full.
+  final ListQueue<LogRecord> _history = ListQueue<LogRecord>();
 
   final StreamController<LogRecord> _controller =
       StreamController<LogRecord>.broadcast();
@@ -31,7 +33,7 @@ class HistoryLogHandler extends LogHandler {
   void handle(LogRecord record) {
     _history.add(record);
     if (_history.length > maxHistory) {
-      _history.removeAt(0);
+      _history.removeFirst();
     }
     _controller.add(record);
   }

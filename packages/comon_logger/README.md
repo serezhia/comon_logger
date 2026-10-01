@@ -58,6 +58,44 @@ Logger('dio.request') -> Logger('dio') -> Logger.root
 
 Handlers on `Logger.root` receive records from all child loggers.
 
+### Levels
+
+A logger without its own level inherits its parent's, so one line sets the
+threshold for the whole app. Guard expensive messages with `isLoggable`.
+
+```dart
+Logger.root.level = LogLevel.WARNING; // every logger without its own level
+Logger('sync').level = LogLevel.FINE; // except this subtree
+Logger('sync').level = null;          // inherit again
+
+if (log.isLoggable(LogLevel.FINE)) log.fine(describe(payload));
+```
+
+### Transformers and redaction
+
+Transformers rewrite or drop a record before any handler or `onRecord`
+listener sees it. They run from the logger that created the record up to the
+root; the first `null` drops it.
+
+```dart
+Logger.root.addTransformer(
+  RedactLogTransformer(
+    keys: {'token', 'password'},
+    maxStringLength: 4096,
+  ).call,
+);
+
+log.info('Signed in', extra: {'token': 'abc'}); // extra: {token: <redacted>}
+```
+
+`RedactLogTransformer` only matches `extra` keys; it cannot find a secret
+inside the message text.
+
+### Tests
+
+Loggers are global. Call `Logger.reset()` in `tearDown` to remove handlers,
+transformers and levels set by a test.
+
 ### Tags
 
 | Tag | Purpose | Examples |

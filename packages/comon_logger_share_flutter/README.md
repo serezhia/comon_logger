@@ -37,6 +37,30 @@ explicitly opt into sharing.
 
 - Share as formatted plain text for quick debugging
 - Share as JSON for import back into `ComonLoggerScreen` or DevTools workflows
+- Share log files from disk (when `logFiles` is set), which also cover earlier
+  sessions, such as the one that crashed
+
+## Sharing log files
+
+Pair it with `FileLogHandler` from `comon_logger_file`; flush first so the
+latest lines are included:
+
+```dart
+ShareLogsAction(
+  logFiles: () async {
+    fileHandler.flush();
+    return [for (final file in fileHandler.getLogFiles()) file.path];
+  },
+)
+```
+
+Files that no longer exist are skipped; with none left the action shows
+`ShareLogsStrings.noFiles` instead of an empty share sheet.
+
+## Translating
+
+Pass `strings: ShareLogsStrings(...)` to translate the button and the sheet.
+The shared subject and file names stay English.
 
 ## Related packages
 
