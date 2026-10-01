@@ -2,8 +2,8 @@
 
 ## Prerequisites
 
-- Dart SDK 3.10 or newer
-- Flutter 3.38 or newer for Flutter packages, examples, and the DevTools
+- Dart SDK 3.13 or newer
+- Flutter 3.47 or newer (pinned in `.fvmrc`) for Flutter packages, examples, and the DevTools
   extension package
 - Melos 7.x via `dart run melos ...`
 

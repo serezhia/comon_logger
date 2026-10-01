@@ -3,6 +3,10 @@
 All notable repository-level changes to the comon_logger monorepo workflow,
 documentation, and release process are documented here.
 
+## Unreleased
+
+- CI and publish workflows now use Flutter 3.47.1 (Dart 3.13.1), pinned in `.fvmrc`.
+
 ## 0.1.2
 
 - Rebuilt the repository as a Dart workspace with Melos configuration living in the root `pubspec.yaml`.
