@@ -6,6 +6,12 @@ import 'log_level.dart';
 import 'log_record.dart';
 import 'log_type.dart';
 
+/// Rewrites or drops a [LogRecord] before any handler sees it.
+///
+/// Return the record (or a modified copy) to keep it, or `null` to drop it.
+/// Use it to redact secrets or trim payloads in one place for every handler.
+typedef LogRecordTransformer = LogRecord? Function(LogRecord record);
+
 /// A hierarchical, cached logger.
 ///
 /// Use the factory constructor to obtain a named logger:
@@ -46,9 +52,52 @@ class Logger {
   /// A broadcast stream of [LogRecord]s produced by this logger.
   Stream<LogRecord> get onRecord => _controller.stream;
 
+  LogLevel? _level;
+
   /// The minimum level for this logger. Records below this level are
   /// discarded before reaching any handler.
-  LogLevel level = LogLevel.FINEST;
+  ///
+  /// A logger without its own level inherits its parent's, up to [root]
+  /// (which defaults to [LogLevel.FINEST]). So `Logger.root.level =
+  /// LogLevel.WARNING` quiets every logger that was not given its own level.
+  /// Assign `null` to go back to inheriting.
+  LogLevel get level => _level ?? _getParent()?.level ?? LogLevel.FINEST;
+
+  set level(LogLevel? value) => _level = value;
+
+  /// Whether a record at [level] would be created by this logger.
+  ///
+  /// Guard expensive messages with it:
+  /// ```dart
+  /// if (log.isLoggable(LogLevel.FINE)) log.fine(describe(payload));
+  /// ```
+  bool isLoggable(LogLevel level) => !(level < this.level);
+
+  final List<LogRecordTransformer> _transformers = [];
+
+  /// Adds a transformer applied to every record logged by this logger and
+  /// its descendants, before any handler or [onRecord] listener sees it.
+  ///
+  /// For one record, transformers run from the logger that created it up to
+  /// [root], each in the order added. The first `null` drops the record.
+  void addTransformer(LogRecordTransformer transformer) =>
+      _transformers.add(transformer);
+
+  void removeTransformer(LogRecordTransformer transformer) =>
+      _transformers.remove(transformer);
+
+  /// Removes every handler, transformer and explicit level from all loggers
+  /// created so far, and sets [root] back to [LogLevel.FINEST].
+  ///
+  /// Loggers are global, so tests that attach handlers should call this in
+  /// `tearDown`. [onRecord] subscriptions are left to their owners.
+  static void reset() {
+    for (final logger in _loggers.values) {
+      logger._handlers.clear();
+      logger._transformers.clear();
+      logger._level = null;
+    }
+  }
 
   // ── Handler management ────────────────────────────────
 
@@ -75,9 +124,9 @@ class Logger {
     String? feature,
     Map<String, dynamic>? extra,
   }) {
-    if (level < this.level) return;
+    if (!isLoggable(level)) return;
 
-    final record = LogRecord(
+    LogRecord? record = LogRecord(
       level: level,
       message: message,
       loggerName: name,
@@ -90,7 +139,14 @@ class Logger {
       extra: extra,
     );
 
-    _publish(record);
+    for (Logger? logger = this; logger != null; logger = logger._getParent()) {
+      for (final transform in logger._transformers) {
+        record = transform(record!);
+        if (record == null) return;
+      }
+    }
+
+    _publish(record!);
   }
 
   void _publish(LogRecord record) {

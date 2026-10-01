@@ -15,4 +15,5 @@ export 'src/formatters/simple_log_formatter.dart';
 export 'src/log_handler.dart';
 export 'src/handlers/console_log_handler.dart';
 export 'src/logger.dart';
+export 'src/transformers/redact_log_transformer.dart';
 export 'src/log_mixin.dart';

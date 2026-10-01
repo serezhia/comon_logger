@@ -1,3 +1,11 @@
+## Unreleased
+
+- Logger levels are hierarchical: a logger without its own level inherits its parent's, so `Logger.root.level` now applies to child loggers. Assign `null` to inherit again. Default behaviour is unchanged while the root stays at `FINEST`.
+- Added `Logger.isLoggable(level)` to guard expensive messages.
+- Added record transformers (`LogRecordTransformer`, `Logger.addTransformer` / `removeTransformer`) that rewrite or drop records before handlers and `onRecord` see them.
+- Added `RedactLogTransformer` to redact `extra` keys and cut long strings.
+- Added `Logger.reset()` for test isolation.
+
 ## 0.1.2
 
 - Moved the package into the shared `packages/` workspace layout and refreshed package metadata for the unified monorepo structure.
