@@ -9,6 +9,7 @@ Rotating file handler for `comon_logger`.
 - plain text or JSON lines mode
 - custom formatter support
 - append-on-restart behavior
+- batched writes: no synchronous disk write per record
 
 ## Installation
 
@@ -43,14 +44,21 @@ Logger.root.addHandler(fileHandler);
 | `maxFiles` | 5 | Max rotated files kept on disk |
 | `writeAsJson` | `false` | Write each record as JSON |
 | `formatter` | `SimpleLogFormatter` | Formatter used for text mode |
+| `flushInterval` | 500 ms | Longest a pending line waits; `Duration.zero` writes each record at once |
+| `maxBufferBytes` | 64 KB | Pending size that triggers a write |
+| `flushLevel` | `SEVERE` | Records at or above it are written immediately, with everything before them |
 
 ## Lifecycle
 
 ```dart
 await fileHandler.init();
-fileHandler.flush();
-await fileHandler.close();
+fileHandler.flush(); // write pending lines and sync the file to disk
+await fileHandler.close(); // writes pending lines first
 ```
+
+Pending lines live in memory for up to `flushInterval`. Call `flush()` when the
+app goes to the background (for example from `AppLifecycleState.paused`) so
+they are not lost if the OS kills it there.
 
 ## Related packages
 
