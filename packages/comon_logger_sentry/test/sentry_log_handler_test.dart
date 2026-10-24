@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:comon_logger/comon_logger.dart';
 import 'package:comon_logger_sentry/comon_logger_sentry.dart';
 import 'package:sentry/sentry.dart';
@@ -131,6 +133,35 @@ void main() {
     });
   });
 
+  group('with Sentry running', () {
+    late _RecordingTransport transport;
+
+    setUp(() async {
+      transport = _RecordingTransport();
+      await Sentry.init(
+        (options) => options
+          ..dsn = 'https://key@errors.example.org/2'
+          ..transport = transport,
+      );
+    });
+    tearDown(Sentry.close);
+
+    test('an event carries the trail up to its record, not after it', () async {
+      Logger.root.addHandler(SentryLogHandler());
+      final log = Logger('cdlib.history');
+
+      log.info('history opened');
+      log.severe('Page failed', error: StateError('store closed'));
+      log.info('history closed');
+      await transport.sent;
+
+      final event = transport.events.single;
+      expect(event.breadcrumbs?.map((crumb) => crumb.message), [
+        'history opened',
+      ]);
+    });
+  });
+
   group('mapLogLevelToSentryLevel', () {
     test('maps predefined levels', () {
       expect(mapLogLevelToSentryLevel(LogLevel.FINEST), SentryLevel.debug);
@@ -187,4 +218,22 @@ class _RecordingHub implements Hub {
   @override
   Object? noSuchMethod(Invocation invocation) =>
       throw UnimplementedError('${invocation.memberName}');
+}
+
+/// Keeps what Sentry would send; nothing leaves the test.
+class _RecordingTransport implements Transport {
+  final events = <SentryEvent>[];
+  final _sent = Completer<void>();
+
+  /// Completes with the first event; Sentry sends after the log call returns.
+  Future<void> get sent => _sent.future;
+
+  @override
+  Future<SentryId?> send(SentryEnvelope envelope) async {
+    for (final item in envelope.items) {
+      if (item.originalObject case final SentryEvent event) events.add(event);
+    }
+    if (!_sent.isCompleted) _sent.complete();
+    return envelope.header.eventId;
+  }
 }

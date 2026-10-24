@@ -34,10 +34,16 @@ class SentryLogHandler extends LogHandler {
   @override
   void handle(LogRecord record) {
     // The event goes first, so its own record is not the last breadcrumb of
-    // its trail.
+    // its trail. Without a scope callback the hub reads the shared scope once
+    // the send is under way, after later records added their breadcrumbs;
+    // with one it copies the scope before this call returns.
     if (eventFilter.shouldLog(record)) {
       unawaited(
-        _hub.captureEvent(_event(record), stackTrace: record.stackTrace),
+        _hub.captureEvent(
+          _event(record),
+          stackTrace: record.stackTrace,
+          withScope: (_) {},
+        ),
       );
     }
     unawaited(_hub.addBreadcrumb(_breadcrumb(record)));
