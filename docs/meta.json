@@ -5,6 +5,7 @@
         "getting-started",
         "core",
         "otel",
+        "sentry",
         "flutter",
         "dio",
         "file",
