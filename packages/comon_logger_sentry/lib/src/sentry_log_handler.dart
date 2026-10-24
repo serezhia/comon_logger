@@ -8,8 +8,9 @@ import 'log_level_mapping.dart';
 /// Sends comon_logger records to Sentry.
 ///
 /// Every record that passes [filter] becomes a breadcrumb, the trail Sentry
-/// attaches to the next event. A record at [eventLevel] or above also becomes
-/// an event of its own, with its error and stack trace when it has them.
+/// attaches to the next event. A record that also passes [eventFilter]
+/// (SEVERE and above by default) becomes an event of its own, with its error
+/// and stack trace when it has them.
 ///
 /// The handler only reports: the app initializes Sentry (`Sentry.init` or
 /// `SentryFlutter.init`) and decides what may leave the device. Transformers
@@ -18,13 +19,15 @@ import 'log_level_mapping.dart';
 class SentryLogHandler extends LogHandler {
   SentryLogHandler({
     LogFilter filter = const AllPassLogFilter(),
-    this.eventLevel = LogLevel.SEVERE,
+    this.eventFilter = const LevelLogFilter(LogLevel.SEVERE),
     Hub? hub,
   }) : _hub = hub ?? HubAdapter(),
        super(filter: filter);
 
-  /// The lowest level reported as an event rather than only a breadcrumb.
-  final LogLevel eventLevel;
+  /// The records reported as events rather than only breadcrumbs. Leave out
+  /// errors that already reach Sentry another way, such as uncaught errors
+  /// logged by an app that also lets Sentry's own handlers catch them.
+  final LogFilter eventFilter;
 
   final Hub _hub;
 
@@ -32,7 +35,7 @@ class SentryLogHandler extends LogHandler {
   void handle(LogRecord record) {
     // The event goes first, so its own record is not the last breadcrumb of
     // its trail.
-    if (record.level >= eventLevel) {
+    if (eventFilter.shouldLog(record)) {
       unawaited(
         _hub.captureEvent(_event(record), stackTrace: record.stackTrace),
       );

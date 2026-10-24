@@ -87,8 +87,13 @@ void main() {
       expect(event.contexts['log'], isNull);
     });
 
-    test('takes a lower event level', () {
-      SentryLogHandler(eventLevel: LogLevel.WARNING, hub: hub).handle(
+    test('reports as events only the records its event filter takes', () {
+      final handler = SentryLogHandler(
+        eventFilter: const _LoggerFilter('cdlib.calls.media'),
+        hub: hub,
+      );
+
+      handler.handle(
         LogRecord(
           level: LogLevel.WARNING,
           message: 'audio poor',
@@ -96,8 +101,18 @@ void main() {
           time: DateTime.utc(2026, 10, 24, 12),
         ),
       );
+      handler.handle(
+        LogRecord(
+          level: LogLevel.SEVERE,
+          message: 'Uncaught error',
+          loggerName: 'app.uncaught',
+          time: DateTime.utc(2026, 10, 24, 12),
+          error: StateError('caught by Sentry itself'),
+        ),
+      );
 
-      expect(hub.calls, ['event', 'breadcrumb']);
+      expect(hub.calls, ['event', 'breadcrumb', 'breadcrumb']);
+      expect(hub.events.single.message?.formatted, 'audio poor');
     });
 
     test('receives records after the root transformers and its filter', () {
@@ -133,6 +148,14 @@ void main() {
       );
     });
   });
+}
+
+class _LoggerFilter extends LogFilter {
+  const _LoggerFilter(this.loggerName);
+  final String loggerName;
+
+  @override
+  bool shouldLog(LogRecord record) => record.loggerName == loggerName;
 }
 
 /// Records what the handler hands to Sentry; nothing leaves the test.

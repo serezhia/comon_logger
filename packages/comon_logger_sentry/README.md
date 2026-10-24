@@ -8,8 +8,8 @@ Sends `comon_logger` records to [Sentry](https://sentry.io) or a self-hosted Sen
 
 - every record that passes its filter becomes a breadcrumb, the trail Sentry
   attaches to the next event;
-- a record at `eventLevel` (SEVERE by default) or above also becomes an event,
-  with its error and stack trace;
+- a record that also passes `eventFilter` (SEVERE and above by default)
+  becomes an event, with its error and stack trace;
 - `layer`, `type` and `feature` become `log.layer`, `log.type` and
   `log.feature` tags; `extra` becomes the event's `log` context and the
   breadcrumb's data.
