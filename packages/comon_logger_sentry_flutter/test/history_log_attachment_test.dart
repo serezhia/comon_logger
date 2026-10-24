@@ -45,6 +45,28 @@ void main() {
     );
   });
 
+  test('leaves out the records its filter rejects', () async {
+    history
+      ..handle(record('kept'))
+      ..handle(
+        LogRecord(
+          level: LogLevel.FINEST,
+          message: 'message text',
+          loggerName: 'app.payload',
+          time: DateTime.utc(2026, 10, 24, 12),
+        ),
+      );
+
+    final attachment = historyLogAttachment(
+      history,
+      filter: const LevelLogFilter(LogLevel.INFO),
+    );
+
+    final text = utf8.decode(await attachment.bytes);
+    expect(text, contains('kept'));
+    expect(text, isNot(contains('message text')));
+  });
+
   test('formats each record with the given formatter', () async {
     history.handle(record('json line'));
 

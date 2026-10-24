@@ -40,8 +40,9 @@ Future<void> main() async {
 }
 ```
 
-`maxRecords` (500 by default) bounds the attachment; `formatter` and
-`filename` change its text and name.
+`maxRecords` (500 by default) bounds the attachment, `filter` leaves out
+records that must not leave the device, `formatter` and `filename` change its
+text and name.
 
 Sentry does not scrub attachments: records are sent as the history stored
 them, after the logger's transformers.

@@ -63,7 +63,7 @@ Sentry.configureScope(
 
 ## Privacy
 
-Transformers on the logger run before handlers, so a `RedactLogTransformer` on `Logger.root` also covers breadcrumbs, events and the attachment. Sentry does not scrub attachments on its side.
+Transformers on the logger run before handlers, so a `RedactLogTransformer` on `Logger.root` also covers breadcrumbs, events and the attachment. Sentry does not scrub attachments on its side. Pass `filter` to `historyLogAttachment` to leave out records that may stay on the device but must not leave it.
 
 ## Level mapping
 
