@@ -1,0 +1,76 @@
+---
+title: Sentry
+description: Turn comon_logger records into Sentry breadcrumbs and events, and attach the in-app history.
+---
+
+# Sentry
+
+`comon_logger_sentry` reports records to Sentry or a self-hosted Sentry. `comon_logger_sentry_flutter` adds the in-app history to each event.
+
+## What the packages do
+
+- `SentryLogHandler` turns every record that passes its filter into a breadcrumb
+- records at `eventLevel` (SEVERE by default) or above also become events, with their error and stack trace
+- `layer`, `type` and `feature` become `log.layer`, `log.type` and `log.feature` tags; `extra` becomes the event's `log` context
+- `historyLogAttachment` attaches the latest records of a `HistoryLogHandler` as text, read when the event is sent
+
+The handler only reports. Initializing Sentry, the DSN and what may leave the device stay with the app.
+
+## Install
+
+```bash
+dart pub add comon_logger_sentry
+```
+
+For Flutter:
+
+```bash
+flutter pub add comon_logger_sentry comon_logger_sentry_flutter sentry_flutter
+```
+
+## Minimal setup
+
+```dart
+import 'package:comon_logger/comon_logger.dart';
+import 'package:comon_logger_sentry/comon_logger_sentry.dart';
+import 'package:sentry/sentry.dart';
+
+Future<void> main() async {
+  await Sentry.init((options) => options.dsn = 'https://key@sentry.example.com/1');
+
+  Logger.root.addHandler(
+    SentryLogHandler(filter: LevelLogFilter(LogLevel.INFO)),
+  );
+}
+```
+
+## Flutter: attach the history
+
+```dart
+final history = HistoryLogHandler(maxHistory: 2000);
+
+Logger.root
+  ..addHandler(history)
+  ..addHandler(SentryLogHandler());
+await SentryFlutter.init(
+  (options) => options.dsn = 'https://key@sentry.example.com/1',
+  appRunner: () => runApp(const MyApp()),
+);
+Sentry.configureScope(
+  (scope) => scope.addAttachment(historyLogAttachment(history)),
+);
+```
+
+## Privacy
+
+Transformers on the logger run before handlers, so a `RedactLogTransformer` on `Logger.root` also covers breadcrumbs, events and the attachment. Sentry does not scrub attachments on its side.
+
+## Level mapping
+
+| comon_logger | Sentry |
+| --- | --- |
+| SHOUT and above | fatal |
+| SEVERE | error |
+| WARNING | warning |
+| INFO | info |
+| below INFO | debug |

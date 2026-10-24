@@ -1,0 +1,28 @@
+name: comon_logger_sentry_flutter
+description: Attaches the in-app comon_logger history to Sentry events.
+version: 0.1.2
+resolution: workspace
+homepage: https://github.com/serezhia/comon_logger
+repository: https://github.com/serezhia/comon_logger/tree/main/packages/comon_logger_sentry_flutter
+issue_tracker: https://github.com/serezhia/comon_logger/issues
+topics:
+  - logging
+  - sentry
+  - flutter
+  - crash-reporting
+
+environment:
+  sdk: ^3.12.0
+  flutter: ">=3.44.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  comon_logger: ^0.1.2
+  comon_logger_flutter: ^0.1.2
+  sentry: ^10.2.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0

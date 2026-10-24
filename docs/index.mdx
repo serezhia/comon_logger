@@ -21,6 +21,8 @@ The ecosystem is split into focused packages so you can keep the core small and 
 | --- | --- | --- |
 | `comon_logger` | Core logger, filters, handlers, formatters | Always start here |
 | `comon_logger_otel` | Export `comon_logger` records into OpenTelemetry logs with trace correlation | You already use `comon_otel` and want logs in the same observability pipeline |
+| `comon_logger_sentry` | Breadcrumbs and error events in Sentry | You report crashes and errors to Sentry or a self-hosted Sentry |
+| `comon_logger_sentry_flutter` | The in-app history attached to Sentry events | You use `HistoryLogHandler` and want the log tail next to each error |
 | `comon_logger_flutter` | In-app viewer and session history | You want to inspect logs inside a Flutter app |
 | `comon_logger_dio` | Dio interceptor and HTTP console formatter | You use Dio and want structured network logs |
 | `comon_logger_dio_flutter` | Rich HTTP cards in the Flutter viewer | You already log Dio requests into `HistoryLogHandler` |
@@ -47,6 +49,10 @@ Use `comon_logger` + `comon_logger_file` for console plus rotating disk output.
 
 Use `comon_logger` + `comon_logger_otel` when the project already emits traces or metrics through `comon_otel` and logs should go to the same backend with active trace correlation.
 
+### Error reporting
+
+Use `comon_logger` + `comon_logger_sentry`, and `comon_logger_sentry_flutter` in a Flutter app that keeps a `HistoryLogHandler`. Records become the breadcrumbs of the next error; severe records become events.
+
 ### Full mobile debugging stack
 
 Use:
@@ -69,6 +75,7 @@ Use:
   <Card title="Getting started" href="/docs/logger/getting-started" description="Install the core package, attach a console handler, and emit the first records." />
   <Card title="Core" href="/docs/logger/core" description="Learn the record model, logger hierarchy, filters, handlers, and formatter pipeline." />
   <Card title="OpenTelemetry" href="/docs/logger/otel" description="Bridge `comon_logger` records into `comon_otel` so logs, traces, and metrics share one pipeline." />
+  <Card title="Sentry" href="/docs/logger/sentry" description="Turn records into Sentry breadcrumbs and events, and attach the in-app history." />
   <Card title="Flutter" href="/docs/logger/flutter" description="Add `HistoryLogHandler`, open the in-app viewer, and plug into DevTools." />
   <Card title="Dio" href="/docs/logger/dio" description="Capture structured HTTP logs and render them in the console or Flutter UI." />
   <Card title="File logging" href="/docs/logger/file" description="Persist logs to rotating files with retention and optional JSON lines output." />

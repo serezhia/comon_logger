@@ -9,11 +9,13 @@ environment:
 workspace:
   - packages/comon_logger
   - packages/comon_logger_otel
+  - packages/comon_logger_sentry
   - packages/comon_logger_flutter
   - packages/comon_logger_dio
   - packages/comon_logger_dio_flutter
   - packages/comon_logger_file
   - packages/comon_logger_share_flutter
+  - packages/comon_logger_sentry_flutter
   - packages/comon_logger_navigation_flutter
   - packages/comon_logger_devtools_extension
   - examples/flutter_app
@@ -28,6 +30,7 @@ melos:
     dart-package:
       - packages/comon_logger
       - packages/comon_logger_otel
+      - packages/comon_logger_sentry
       - packages/comon_logger_dio
       - packages/comon_logger_file
       - examples/shelf_app
@@ -35,6 +38,7 @@ melos:
       - packages/comon_logger_flutter
       - packages/comon_logger_dio_flutter
       - packages/comon_logger_share_flutter
+      - packages/comon_logger_sentry_flutter
       - packages/comon_logger_navigation_flutter
       - packages/comon_logger_devtools_extension
       - examples/flutter_app

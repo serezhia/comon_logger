@@ -20,6 +20,8 @@ and navigation tracking.
 |---------|------------|---------|
 | [comon_logger](packages/comon_logger/) | Core logging primitives, handlers, filters, formatters, logger hierarchy | [![pub](https://img.shields.io/pub/v/comon_logger.svg)](https://pub.dev/packages/comon_logger) |
 | [comon_logger_otel](packages/comon_logger_otel/) | Bridge `comon_logger` records into OpenTelemetry logs with trace correlation | [![pub](https://img.shields.io/pub/v/comon_logger_otel.svg)](https://pub.dev/packages/comon_logger_otel) |
+| [comon_logger_sentry](packages/comon_logger_sentry/) | Records as Sentry breadcrumbs, severe records as Sentry events | [![pub](https://img.shields.io/pub/v/comon_logger_sentry.svg)](https://pub.dev/packages/comon_logger_sentry) |
+| [comon_logger_sentry_flutter](packages/comon_logger_sentry_flutter/) | The in-app log history attached to Sentry events | [![pub](https://img.shields.io/pub/v/comon_logger_sentry_flutter.svg)](https://pub.dev/packages/comon_logger_sentry_flutter) |
 | [comon_logger_flutter](packages/comon_logger_flutter/) | In-app Flutter log screen, `HistoryLogHandler`, DevTools service extension | [![pub](https://img.shields.io/pub/v/comon_logger_flutter.svg)](https://pub.dev/packages/comon_logger_flutter) |
 | [comon_logger_dio](packages/comon_logger_dio/) | Dio interceptor plus rich HTTP console formatter | [![pub](https://img.shields.io/pub/v/comon_logger_dio.svg)](https://pub.dev/packages/comon_logger_dio) |
 | [comon_logger_dio_flutter](packages/comon_logger_dio_flutter/) | HTTP renderer for `ComonLoggerScreen` | [![pub](https://img.shields.io/pub/v/comon_logger_dio_flutter.svg)](https://pub.dev/packages/comon_logger_dio_flutter) |
@@ -33,6 +35,7 @@ and navigation tracking.
 |------|----------|
 | Core | `comon_logger` |
 | Observability export | `comon_logger_otel` |
+| Error reporting | `comon_logger_sentry`, `comon_logger_sentry_flutter` |
 | Flutter viewer | `comon_logger_flutter` |
 | Console HTTP | `comon_logger_dio` |
 | Flutter HTTP UI | `comon_logger_dio_flutter` |
